@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: educ-pro-ia
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-5.6-luna
+      - key: MP_ACCESS_TOKEN
+        sync: false
+      - key: MP_PLAN_DOCENTE
+        sync: false
+      - key: MP_PLAN_PROFESIONAL
+        sync: false
+      - key: MP_WEBHOOK_SECRET
+        sync: false
+      - key: APP_BASE_URL
+        sync: false
