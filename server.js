@@ -33,7 +33,8 @@ const current=req=>{const t=req.headers.authorization?.replace(/^Bearer\s+/i,'')
 
 app.get('/api/health',(req,res)=>{
   const sk=!!String(process.env.OPENAI_API_KEY||'').trim();
-  res.json({ok:true,commercial:true,version:'v21',configured:sk,serverKey:sk,paymentsConfigured:!!String(process.env.MP_ACCESS_TOKEN||'').trim()});
+  const model=String(process.env.OPENAI_MODEL||'gpt-5.6-luna').trim();
+  res.json({ok:true,commercial:true,version:'v21',configured:sk,serverKey:sk,model,paymentsConfigured:!!String(process.env.MP_ACCESS_TOKEN||'').trim()});
 });
 
 app.post('/api/register',(req,res)=>{
@@ -160,11 +161,12 @@ app.post('/api/webhooks/mercadopago',async(req,res)=>{
 });
 
 app.get('*',(req,res)=>{if(req.path.startsWith('/api/'))return res.status(404).json({error:'Ruta API no encontrada.'});res.sendFile(path.join(__dirname,'index.html'));});
-const preferredPort=Number(process.env.PORT)||3000;
+// En uso local se reserva el puerto 3021 para evitar conflictos con versiones antiguas (v15/v18).
+const preferredPort=Number(process.env.PORT)||3021;
 function iniciarEnPuerto(porto){
   const servidor=app.listen(porto,()=>{
     console.log(`Educ.Pro IA v21 disponible en http://localhost:${porto}`);
-    console.log('Si el puerto 3000 estaba ocupado, la app eligió automáticamente otro puerto libre.');
+    console.log('El arranque local usa el puerto 3021 para evitar versiones antiguas; si está ocupado, prueba 3022, 3023, etc.');
   });
   servidor.on('error',(err)=>{
     if(err.code==='EADDRINUSE'){

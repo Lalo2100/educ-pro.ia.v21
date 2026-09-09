@@ -3,10 +3,10 @@
 Versión basada en v16 con arranque más robusto.
 
 ## Novedad v21
-Si el puerto 3000 está ocupado por otra aplicación, Educ.Pro IA prueba automáticamente 3001, 3002, 3003, etc., hasta encontrar un puerto libre. Ya no es necesario cerrar manualmente Node.js por este motivo.
+Para evitar que vuelva a abrirse una versión vieja como v15/v18, el arranque local de v21 usa el puerto exclusivo 3021. Si está ocupado, prueba 3022, 3023, 3024, etc. Ya no es necesario cerrar manualmente Node.js por este motivo.
 
 ## Inicio
-Ejecutá `INICIAR_EDUC_PRO.bat`. La ventana mostrará la dirección exacta, por ejemplo `http://localhost:3000` o `http://localhost:3001`.
+Ejecutá `INICIAR_EDUC_PRO.bat`. La ventana mostrará la dirección exacta, por ejemplo `http://localhost:3021` o, si está ocupado, `http://localhost:3022`, `3023`, etc..
 
 ## IA y producción
 La clave de OpenAI debe configurarse en el servidor mediante `OPENAI_API_KEY`. Para producción también se requieren las variables de Mercado Pago indicadas en `.env.example`, HTTPS, dominio y una base de datos adecuada.
@@ -39,3 +39,21 @@ Las funciones de Cuadro sinóptico, Comparativo y Tabla incluyen instrucciones d
 
 ## Render / GitHub
 Esta versión incluye `render.yaml` para desplegar como Web Service desde GitHub mediante Render Blueprint. Las claves secretas se configuran en Render como variables de entorno y no se guardan en el repositorio.
+
+
+## 2) IA real — configuración
+
+Educ.Pro IA v21 utiliza la **Responses API de OpenAI**. El modelo predeterminado es `gpt-5.6-luna` y puede cambiarse mediante `OPENAI_MODEL`.
+
+### Prueba local
+1. Copiá `.env.example` como `.env`.
+2. En `.env`, colocá tu clave en `OPENAI_API_KEY=`.
+3. Ejecutá `INICIAR_EDUC_PRO.bat`.
+4. Iniciá sesión en Educ.Pro IA y generá una planificación de prueba.
+
+También existe **⚙️ Configuración IA** para una prueba local. Esa opción no se utiliza como mecanismo de clave en producción.
+
+### Producción
+La clave debe quedar solamente en la variable de entorno `OPENAI_API_KEY` del servidor. **No la pegues en `index.html`, GitHub ni dentro del ZIP.**
+
+El estado se puede comprobar en `/api/health`: devuelve la versión, el modelo y si el servidor detectó una clave configurada, pero nunca muestra la clave.
