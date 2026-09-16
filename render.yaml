@@ -1,23 +1,28 @@
 services:
   - type: web
     name: educ-pro-ia
-    runtime: node
+    env: node
     plan: free
     buildCommand: npm install
     startCommand: npm start
-    healthCheckPath: /api/health
     envVars:
-      - key: OPENAI_API_KEY
+      - key: NODE_ENV
+        value: production
+      - key: AI_PROVIDER
+        value: gemini
+      - key: GEMINI_MODEL
+        value: gemini-3.8-flash
+      - key: GEMINI_API_KEY
         sync: false
-      - key: OPENAI_MODEL
-        value: gpt-5.6-luna
+      - key: GEMINI_FALLBACK_MODELS
+        value: gemini-3.7-flash,gemini-3.6-flash,gemini-3.5-flash-lite
       - key: MP_ACCESS_TOKEN
-        sync: false
-      - key: MP_PLAN_DOCENTE
-        sync: false
-      - key: MP_PLAN_PROFESIONAL
         sync: false
       - key: MP_WEBHOOK_SECRET
         sync: false
+      - key: MP_PRICE_DOCENTE
+        value: "4999"
+      - key: MP_PRICE_PROFESIONAL
+        value: "8999"
       - key: APP_BASE_URL
         sync: false

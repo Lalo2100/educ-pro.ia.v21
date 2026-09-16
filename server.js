@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
-const OpenAI = require('openai');
 require('dotenv').config();
 
 const app = express();
@@ -15,6 +14,23 @@ if(!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR,{recursive:true});
 if(!fs.existsSync(USERS_FILE)) fs.writeFileSync(USERS_FILE,'[]');
 
 const sessions=new Map();
+const rateBuckets=new Map();
+function rateLimit(key, max=30, windowMs=60000){
+  const now=Date.now(), b=rateBuckets.get(key);
+  if(!b || now-b.start>=windowMs){rateBuckets.set(key,{start:now,count:1});return true;}
+  b.count++;
+  return b.count<=max;
+}
+function clientIp(req){return String(req.headers['x-forwarded-for']||req.socket.remoteAddress||'unknown').split(',')[0].trim();}
+app.disable('x-powered-by');
+app.use((req,res,next)=>{
+  res.setHeader('X-Content-Type-Options','nosniff');
+  res.setHeader('X-Frame-Options','SAMEORIGIN');
+  res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');
+  if(req.path.startsWith('/api/') && !rateLimit(clientIp(req),60,60000))
+    return res.status(429).json({error:'Demasiadas solicitudes. Esperá un momento e intentá nuevamente.'});
+  next();
+});
 const limits={gratis:5,docente:100,profesional:300,institucion:1000};
 const plans=[
   {id:'gratis',name:'Gratis',price:0,limit:5,description:'Para probar Educ.Pro IA'},
@@ -32,9 +48,15 @@ const email=v=>String(v||'').trim().toLowerCase();
 const current=req=>{const t=req.headers.authorization?.replace(/^Bearer\s+/i,'');return t?sessions.get(t):null};
 
 app.get('/api/health',(req,res)=>{
-  const sk=!!String(process.env.OPENAI_API_KEY||'').trim();
-  const model=String(process.env.OPENAI_MODEL||'gpt-5.6-luna').trim();
-  res.json({ok:true,commercial:true,version:'v21',configured:sk,serverKey:sk,model,paymentsConfigured:!!String(process.env.MP_ACCESS_TOKEN||'').trim()});
+  const openai=!!String(process.env.OPENAI_API_KEY||'').trim();
+  const gemini=!!String(process.env.GEMINI_API_KEY||'').trim();
+  const provider=String(process.env.AI_PROVIDER||'auto').trim().toLowerCase();
+  const configured=provider==='gemini'?gemini:provider==='openai'?openai:(openai||gemini);
+  const activeProvider = configured ? (provider==='auto' ? (gemini && !openai ? 'gemini' : openai && !gemini ? 'openai' : 'gemini') : provider) : 'none';
+  const model=activeProvider==='gemini'
+    ? String(process.env.GEMINI_MODEL||'gemini-3.8-flash').trim()
+    : String(process.env.OPENAI_MODEL||'').trim();
+  res.json({ok:true,commercial:true,version:'v21',configured,providers:{openai,gemini},provider:activeProvider,model,paymentsConfigured:!!String(process.env.MP_ACCESS_TOKEN||'').trim()});
 });
 
 app.post('/api/register',(req,res)=>{
@@ -64,46 +86,141 @@ app.post('/api/generate',async(req,res)=>{
     const changed=refreshUsage(f); if(changed) save(a);
     const limit=limits[f.plan]||5;
     if((f.usage||0)>=limit)return res.status(429).json({error:`Alcanzaste el límite de ${limit} generaciones de tu plan.`});
-    const serverKey=String(process.env.OPENAI_API_KEY||'').trim();
-    // Modo de prueba local: permite usar la clave guardada en Configuración IA
-    // sin exponerla en producción. En producción se usa exclusivamente OPENAI_API_KEY.
-    const browserKey=String(req.headers['x-openai-api-key']||'').trim();
-    const isLocal=!['production'].includes(String(process.env.NODE_ENV||'').toLowerCase()) && (req.ip==='127.0.0.1'||req.ip==='::1'||req.ip==='::ffff:127.0.0.1');
-    const key=serverKey || (isLocal && process.env.ALLOW_LOCAL_BROWSER_KEY!=='false' ? browserKey : '');
-    if(!key)return res.status(503).json({error:isLocal?'La IA no está configurada. Abrí ⚙️ Configuración IA y guardá tu clave de OpenAI para esta prueba local.':'La IA no está configurada en el servidor. Configurá OPENAI_API_KEY en producción.'});
-    const {prompt,context}=req.body||{};if(!prompt)return res.status(400).json({error:'No se recibió el pedido del docente.'});
-    const model=process.env.OPENAI_MODEL||'gpt-5.6-luna';
-    const client=new OpenAI({apiKey:key});
-    const r=await client.responses.create({model,instructions:'Sos Educ.Pro IA, asistente especializado en planificación y producción de materiales educativos para docentes argentinos. Usá primero el material de referencia. No inventes citas. Respetá nivel, área y pedido. Entregá producción profesional lista para copiar a Word y respetá la arquitectura del modelo cuando se indique.',input:`PEDIDO DEL DOCENTE:\n${prompt}\n\nMATERIAL DE REFERENCIA Y BIBLIOTECA:\n${context||'(sin materiales)'}`});
-    f.usage=(f.usage||0)+1;save(a);sessions.set(req.headers.authorization.replace(/^Bearer\s+/i,''),f);
-    res.json({text:r.output_text||'',model,usage:f.usage,limit});
+
+    const {prompt,context}=req.body||{};
+    if(!prompt)return res.status(400).json({error:'No se recibió el pedido del docente.'});
+
+    const provider=String(process.env.AI_PROVIDER||'auto').trim().toLowerCase();
+    const openaiKey=String(process.env.OPENAI_API_KEY||'').trim();
+    const geminiKey=String(process.env.GEMINI_API_KEY||'').trim();
+    let chosen=provider;
+    if(chosen==='auto') chosen=geminiKey?'gemini':(openaiKey?'openai':'none');
+    if(chosen==='openai' && !openaiKey) chosen=geminiKey?'gemini':'none';
+    if(chosen==='gemini' && !geminiKey) chosen=openaiKey?'openai':'none';
+    if(chosen==='none')return res.status(503).json({error:'La IA no está configurada. En el servidor agregá GEMINI_API_KEY (recomendado) u OPENAI_API_KEY como variable secreta.'});
+
+    const instructions='Sos Educ.Pro IA, asistente especializado en planificación y producción de materiales educativos para docentes argentinos. Priorizá el contexto de Córdoba cuando corresponda. Usá primero el material de referencia. No inventes citas, páginas, leyes, diseños curriculares ni atribuciones. Respetá nivel, área y pedido. Entregá una producción profesional, clara, completa y lista para copiar a Word. Si falta un dato institucional, dejalo como campo editable o propuesta, no lo inventes.';
+    const input=`PEDIDO DEL DOCENTE:\n${prompt}\n\nMATERIAL DE REFERENCIA Y BIBLIOTECA:\n${context||'(sin materiales)'}`;
+    let text='',model='';
+
+    if(chosen==='openai'){
+      if(!openaiKey) return res.status(503).json({error:'OpenAI no está configurado en el servidor. Usá Gemini o configurá OPENAI_API_KEY.'});
+      return res.status(503).json({error:'Esta edición comercial está preparada para Gemini como proveedor principal. Configurá AI_PROVIDER=auto para habilitar OpenAI como alternativa.'});
+    }else{
+      // Producción: reintenta ante saturación y cambia automáticamente de modelo.
+      const primary=String(process.env.GEMINI_MODEL||'gemini-3.8-flash').trim();
+      const fallback=String(process.env.GEMINI_FALLBACK_MODELS||'gemini-3.7-flash,gemini-3.6-flash,gemini-3.5-flash-lite')
+        .split(',').map(x=>x.trim()).filter(Boolean);
+      const models=[...new Set([primary,...fallback])];
+      let lastErr=null;
+
+      for(const candidateModel of models){
+        for(let attempt=1;attempt<=2;attempt++){
+          model=candidateModel;
+          try{
+            const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(candidateModel)}:generateContent`,{
+              method:'POST',
+              headers:{'Content-Type':'application/json','x-goog-api-key':geminiKey},
+              body:JSON.stringify({
+                system_instruction:{parts:[{text:instructions}]},
+                contents:[{role:'user',parts:[{text:input}]}],
+                generationConfig:{maxOutputTokens:12000,thinkingConfig:{thinkingLevel:'medium'}}
+              })
+            });
+            const raw=await r.text();
+            let data={};
+            try{data=JSON.parse(raw)}catch{data={error:{message:raw||'Respuesta no válida de Gemini.'}}}
+            if(r.ok){
+              text=data?.candidates?.[0]?.content?.parts?.map(p=>p.text||'').join('')||'';
+              if(text) break;
+              lastErr=Object.assign(new Error('Gemini no devolvió contenido.'),{status:502});
+            }else{
+              const apiMessage=data?.error?.message||'Gemini no pudo generar la respuesta.';
+              lastErr=Object.assign(new Error(apiMessage),{status:r.status});
+              if([401,403,404].includes(r.status)) throw lastErr;
+              const busy=/high demand|overloaded|temporarily unavailable|resource exhausted|rate limit|quota|too many requests/i.test(apiMessage);
+              const transient=[429,500,502,503,504].includes(r.status)||busy;
+              if(!transient) throw lastErr;
+              if(attempt<2) await new Promise(resolve=>setTimeout(resolve,1500*Math.pow(2,attempt-1)));
+            }
+          }catch(err){
+            lastErr=err;
+            if([401,403,404].includes(err?.status)) throw err;
+            if(attempt<2) await new Promise(resolve=>setTimeout(resolve,1500*Math.pow(2,attempt-1)));
+          }
+          if(text) break;
+        }
+        if(text) break;
+      }
+      if(!text) throw (lastErr||new Error('Gemini no pudo generar la respuesta.'));
+    }
+
+    if(!text)throw new Error('La IA no devolvió contenido.');
+    f.usage=(f.usage||0)+1;save(a);
+    sessions.set(req.headers.authorization.replace(/^Bearer\s+/i,''),f);
+    res.json({text,model,provider:chosen,usage:f.usage,limit});
   }catch(e){
     console.error('ERROR /api/generate:',e);
-    const m=String(e?.message||'Error al generar con OpenAI.');
-    if(/401|Incorrect API key|invalid.*api key/i.test(m))return res.status(401).json({error:'La clave de OpenAI configurada es inválida. Revisá la configuración del servidor.'});
+    const m=String(e?.message||'Error al generar con IA.');
+    if(/401|403|Incorrect API key|invalid.*api key|unauthorized|permission denied/i.test(m))
+      return res.status(502).json({error:'Gemini rechazó la clave o no tiene permisos para usar el modelo. Verificá GEMINI_API_KEY en Render y que la clave pertenezca a un proyecto con la Gemini API habilitada.'});
+    if(e?.status===429 || e?.status===503 || /high demand|overloaded|temporarily unavailable|quota|rate limit|resource exhausted|too many requests/i.test(m))
+      return res.status(503).json({error:'La IA está momentáneamente ocupada. El servidor reintentó automáticamente y probó modelos alternativos. Esperá unos segundos y volvé a intentar.'});
+    if(e?.status===404 || /not found|model.*not found/i.test(m))
+      return res.status(502).json({error:`El modelo Gemini configurado (${model||'no indicado'}) no está disponible para esta API key. Cambiá GEMINI_MODEL por un modelo Gemini estable disponible.`});
     res.status(500).json({error:m});
   }
 });
 
-// Mercado Pago: suscripciones recurrentes mediante planes previamente creados.
-// En producción se configuran MP_ACCESS_TOKEN, MP_PLAN_DOCENTE, MP_PLAN_PROFESIONAL y APP_BASE_URL.
+// Mercado Pago: suscripciones recurrentes sin plan previo. Mercado Pago permite crear /preapproval directamente.
 app.post('/api/subscribe',async(req,res)=>{
   try{
     const u=current(req);if(!u)return res.status(401).json({error:'Iniciá sesión antes de suscribirte.'});
     const plan=String(req.body?.plan||'');
     if(!['docente','profesional'].includes(plan))return res.status(400).json({error:'Plan de suscripción no válido.'});
+
     const access=String(process.env.MP_ACCESS_TOKEN||'').trim();
-    if(!access)return res.status(503).json({error:'Mercado Pago todavía no está configurado en el servidor. Falta MP_ACCESS_TOKEN.'});
-    const planId=plan==='docente'?String(process.env.MP_PLAN_DOCENTE||'').trim():String(process.env.MP_PLAN_PROFESIONAL||'').trim();
-    if(!planId)return res.status(503).json({error:`Falta configurar MP_PLAN_${plan.toUpperCase()} en el servidor.`});
-    const base=String(process.env.APP_BASE_URL||`http://localhost:${process.env.PORT||3000}`).replace(/\/$/,'');
-    const body={preapproval_plan_id:planId,reason:`Educ.Pro IA - Plan ${plan}`,external_reference:u.id,payer_email:u.email,back_url:`${base}/?payment=return`};
-    const r=await fetch('https://api.mercadopago.com/preapproval',{method:'POST',headers:{'Authorization':`Bearer ${access}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!access)return res.status(503).json({error:'Mercado Pago todavía no está configurado en el servidor.'});
+
+    const price=plan==='docente'
+      ? Number(process.env.MP_PRICE_DOCENTE||4999)
+      : Number(process.env.MP_PRICE_PROFESIONAL||8999);
+    if(!Number.isFinite(price)||price<=0)return res.status(503).json({error:'Precio de Mercado Pago no válido en el servidor.'});
+
+    const base=String(process.env.APP_BASE_URL||`http://localhost:${process.env.PORT||3021}`).replace(/\/$/,'');
+    const body={
+      reason:`Educ.Pro IA - Plan ${plan}`,
+      external_reference:u.id,
+      payer_email:u.email,
+      auto_recurring:{
+        frequency:1,
+        frequency_type:'months',
+        transaction_amount:price,
+        currency_id:'ARS'
+      },
+      back_url:`${base}/?payment=return`,
+      status:'pending'
+    };
+
+    const r=await fetch('https://api.mercadopago.com/preapproval',{
+      method:'POST',
+      headers:{'Authorization':`Bearer ${access}`,'Content-Type':'application/json'},
+      body:JSON.stringify(body)
+    });
     const data=await r.json();
     if(!r.ok)return res.status(r.status).json({error:data?.message||data?.error||'Mercado Pago rechazó la solicitud.'});
-    const a=users(),f=a.find(x=>x.id===u.id);if(f){f.subscription={provider:'mercadopago',id:data.id,plan,status:data.status||'pending'};save(a);sessions.set(req.headers.authorization.replace(/^Bearer\s+/i,''),f);}
+
+    const a=users(),f=a.find(x=>x.id===u.id);
+    if(f){
+      f.subscription={provider:'mercadopago',id:data.id,plan,status:data.status||'pending',lastUpdate:new Date().toISOString()};
+      save(a);
+      sessions.set(req.headers.authorization.replace(/^Bearer\s+/i,''),f);
+    }
     res.json({ok:true,id:data.id,status:data.status,init_point:data.init_point});
-  }catch(e){console.error('ERROR /api/subscribe:',e);res.status(500).json({error:e?.message||'No se pudo iniciar la suscripción.'});}
+  }catch(e){
+    console.error('ERROR /api/subscribe:',e);
+    res.status(500).json({error:e?.message||'No se pudo iniciar la suscripción.'});
+  }
 });
 
 // Webhook de Mercado Pago: valida firma (si está configurado), consulta la suscripción
@@ -132,10 +249,7 @@ async function actualizarSuscripcionMP(subscriptionId){
   const f=a.find(x=>x.id===String(data.external_reference||''));
   if(!f) return data;
   let plan=f.subscription?.plan||'gratis';
-  const docente=String(process.env.MP_PLAN_DOCENTE||'').trim();
-  const profesional=String(process.env.MP_PLAN_PROFESIONAL||'').trim();
-  if(data.preapproval_plan_id===docente) plan='docente';
-  if(data.preapproval_plan_id===profesional) plan='profesional';
+  if(!['docente','profesional'].includes(plan)) plan='gratis';
   const status=String(data.status||'').toLowerCase();
   const active=['authorized','active'].includes(status);
   f.subscription={provider:'mercadopago',id:data.id,plan,status,lastUpdate:new Date().toISOString()};
@@ -152,7 +266,9 @@ app.post('/api/webhooks/mercadopago',async(req,res)=>{
     const type=String(req.query.type||req.body?.type||'');
     const id=String(req.query['data.id']||req.body?.data?.id||'');
     console.log('Mercado Pago webhook:',type,id);
-    if(type==='subscription_preapproval' && id) await actualizarSuscripcionMP(id);
+    if(['subscription_preapproval','subscription_preapproval_plan'].includes(type) && id) await actualizarSuscripcionMP(id);
+    // Los pagos recurrentes también generan eventos; se aceptan y registran para auditoría.
+    if(type==='subscription_authorized_payment' && id) console.log('Pago recurrente recibido:',id);
     res.sendStatus(200);
   }catch(e){
     console.error('ERROR webhook Mercado Pago:',e);

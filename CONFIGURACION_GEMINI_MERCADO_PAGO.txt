@@ -1,0 +1,71 @@
+EDUC.PRO IA v21 FINAL — CONFIGURACIÓN GEMINI + MERCADO PAGO
+
+1. GEMINI
+---------
+En Google AI Studio creá una API key y agregala como secreto en Render:
+
+GEMINI_API_KEY = tu_clave
+GEMINI_MODEL = gemini-3.8-flash
+GEMINI_FALLBACK_MODELS = gemini-3.7-flash,gemini-3.6-flash,gemini-3.5-flash-lite
+AI_PROVIDER = gemini
+
+La clave NO debe pegarse en index.html, GitHub ni dentro del ZIP.
+
+2. MERCADO PAGO
+---------------
+En Render agregá:
+
+MP_ACCESS_TOKEN = tu_access_token_de_produccion
+MP_WEBHOOK_SECRET = secreto_del_webhook
+MP_PRICE_DOCENTE = 4999
+MP_PRICE_PROFESIONAL = 8999
+APP_BASE_URL = https://TU-SERVICIO.onrender.com
+
+Webhook:
+https://TU-SERVICIO.onrender.com/api/webhooks/mercadopago
+
+Configurá en Mercado Pago el tópico de suscripciones:
+subscription_preapproval
+
+La app crea suscripciones mensuales mediante /preapproval y actualiza el plan del usuario cuando Mercado Pago confirma el estado.
+
+3. COMPROBAR
+------------
+Abrí:
+https://TU-SERVICIO.onrender.com/api/health
+
+Esperado:
+configured=true
+provider=gemini
+model=gemini-3.8-flash
+paymentsConfigured=true (cuando MP_ACCESS_TOKEN esté configurado)
+
+4. PRUEBA FUNCIONAL
+-------------------
+- Crear cuenta.
+- Iniciar sesión.
+- Generar Planificación anual.
+- Generar Proyecto.
+- Generar Secuencia didáctica.
+- Generar Evaluación.
+- Generar Material.
+- Cargar un DOCX/PDF/TXT/HTML como modelo.
+- Agregar material a Biblioteca.
+- Probar Efemérides.
+- Probar Actos.
+- Probar Música.
+- Probar Videos.
+- Copiar a Word.
+- Descargar documento.
+- Ver planes.
+- Iniciar checkout de Mercado Pago.
+
+5. IMPORTANTE
+-------------
+La aplicación no pide API keys a los docentes.
+La IA usa la clave del servidor.
+
+Para uso comercial real, conectá una base de datos persistente antes de escalar, porque data/users.json no es almacenamiento permanente garantizado en el plan gratuito de Render.
+
+
+CORRECCIÓN V4: ante alta demanda/saturación de Gemini, el servidor reintenta y prueba modelos alternativos automáticamente.

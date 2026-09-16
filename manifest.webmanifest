@@ -1,0 +1,18 @@
+{
+  "name": "Educ.Pro IA — Asistente inteligente para docentes",
+  "short_name": "Educ.Pro IA",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4f6fb",
+  "theme_color": "#4f46e5",
+  "lang": "es-AR",
+  "description": "Plataforma web de asistencia inteligente para docentes.",
+  "icons": [
+    {
+      "src": "/assets/educ-pro-ia-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
