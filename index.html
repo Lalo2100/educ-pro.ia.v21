@@ -330,11 +330,65 @@ button.danger{
   gap:10px;
 }
 
+```css
 .plan{
   border:1px solid var(--line);
-  border-radius:12px;
-  padding:14px;
+  border-radius:14px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:210px;
+  box-sizing:border-box;
 }
+
+.plan-content{
+  flex:1;
+}
+
+.plan h3{
+  margin-top:0;
+}
+
+.price{
+  font-weight:800;
+  font-size:20px;
+  margin:10px 0;
+}
+
+.plan-action{
+  margin-top:20px;
+}
+
+.plan-button{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  text-align:center;
+  text-decoration:none;
+  padding:11px 14px;
+  border-radius:10px;
+  font-weight:700;
+  background:#4f46e5;
+  color:white;
+}
+
+.plan-button:hover{
+  opacity:.9;
+}
+
+.free-plan{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  text-align:center;
+  padding:11px 14px;
+  border-radius:10px;
+  font-weight:700;
+  background:#f1f5f9;
+  color:#475569;
+}
+```
 
 
 .plan a{display:block;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--primary);color:#fff;text-decoration:none;text-align:center;font-weight:700}.plan a:hover{opacity:.9}
