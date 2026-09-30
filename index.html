@@ -326,8 +326,9 @@ button.danger{
 
 .plans{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:16px;
+  align-items:stretch;
 }
 
 .plan{
@@ -336,8 +337,23 @@ button.danger{
   padding:18px;
   display:flex;
   flex-direction:column;
-  min-height:210px;
   box-sizing:border-box;
+  min-width:0;
+  min-height:230px;
+}
+
+.plan h3{
+  margin:0 0 12px;
+}
+
+.plan .price{
+  font-weight:800;
+  font-size:20px;
+  margin-bottom:8px;
+}
+
+.plan p{
+  margin:0;
 }
 
 .plan-action{
@@ -349,22 +365,26 @@ button.danger{
   display:block;
   width:100%;
   box-sizing:border-box;
-  padding:11px 14px;
+  padding:12px 14px;
+  border-radius:10px;
   text-align:center;
   text-decoration:none;
-  border-radius:10px;
   font-weight:700;
   background:#4f46e5;
-  color:#fff;
+  color:#ffffff;
+}
+
+.plan-button:hover{
+  opacity:.9;
 }
 
 .free-plan{
   display:block;
   width:100%;
   box-sizing:border-box;
-  padding:11px 14px;
-  text-align:center;
+  padding:12px 14px;
   border-radius:10px;
+  text-align:center;
   font-weight:700;
   background:#f1f5f9;
   color:#475569;
@@ -372,7 +392,7 @@ button.danger{
 
 @media(max-width:900px){
   .plans{
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
 }
 
@@ -381,13 +401,12 @@ button.danger{
     grid-template-columns:1fr;
   }
 }
-
 .plan-content{
   flex:1;
 }
 
 .plan h3{
-  margin-top:0;
+  margin:0 0 12px;
 }
 
 .price{
@@ -397,7 +416,8 @@ button.danger{
 }
 
 .plan-action{
-  margin-top:20px;
+  margin-top:auto;
+  padding-top:20px;
 }
 
 .plan-button{
@@ -406,11 +426,11 @@ button.danger{
   box-sizing:border-box;
   text-align:center;
   text-decoration:none;
-  padding:11px 14px;
+  padding:12px 14px;
   border-radius:10px;
   font-weight:700;
   background:#4f46e5;
-  color:white;
+  color:#fff;
 }
 
 .plan-button:hover{
@@ -422,17 +442,12 @@ button.danger{
   width:100%;
   box-sizing:border-box;
   text-align:center;
-  padding:11px 14px;
+  padding:12px 14px;
   border-radius:10px;
   font-weight:700;
   background:#f1f5f9;
   color:#475569;
 }
-```
-
-
-.plan a{display:block;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--primary);color:#fff;text-decoration:none;text-align:center;font-weight:700}.plan a:hover{opacity:.9}
-
 .price{
   font-weight:800;
   font-size:18px;
