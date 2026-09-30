@@ -1,353 +1,1606 @@
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Educ.Pro IA · Asistente inteligente para docentes</title>
-<link rel="icon" type="image/png" href="/assets/educ-pro-ia-logo.png">
+<!DOCTYPE html>
+<!-- saved from url=(0042)https://edu-sistem-pro-ia-zyjj.vercel.app/ -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#4f46e5">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Educ.Pro IA">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Edu.sistem Pro IA</title>
 
-<script src="https://unpkg.com/mammoth@1.8.0/mammoth.browser.min.js"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}header{background:#fff;color:#172033;padding:18px;border-radius:0 0 24px 24px;box-shadow:0 4px 18px rgba(0,0,0,.07);text-align:center}.brand-header{display:flex;flex-direction:column;align-items:center;gap:8px}.brand-logo{display:block;width:min(360px,72vw);height:auto;max-height:230px;object-fit:contain}.brand-version{font-weight:700;color:#3730a3;font-size:14px}.brand-header h1,.brand-header p{margin:0}header h1{margin:0 0 6px;font-size:30px}header p{margin:0;opacity:.9}main{max-width:1050px;margin:auto;padding:18px}.card{background:#fff;border-radius:18px;padding:20px;margin:14px 0;box-shadow:0 4px 18px rgba(0,0,0,.07)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.option{border:1px solid #ddd;border-radius:14px;padding:16px;text-align:center;cursor:pointer;background:#fff}.option:hover{border-color:#4f46e5;background:#f8f8ff}label{display:block;font-weight:bold;margin:12px 0 6px}input,select,textarea{width:100%;padding:12px;border:1px solid #d7dce7;border-radius:10px;font-size:15px}textarea{min-height:110px;resize:vertical}button{border:0;border-radius:12px;padding:13px 18px;background:#4f46e5;color:#fff;font-weight:bold;cursor:pointer;margin-top:14px}.secondary{background:#e9eafc;color:#3730a3;margin-left:8px}.danger{background:#fee2e2;color:#991b1b}.small{font-size:13px;color:#687386}.upload{border:2px dashed #b9c0d0;padding:22px;text-align:center;border-radius:15px;background:#fafbff}.file-list{margin-top:12px}.file-item{padding:10px;border:1px solid #e3e6ee;border-radius:10px;margin:7px 0}.status{padding:10px;border-radius:10px;background:#f1f5f9;margin-top:10px}.check{display:flex;gap:8px;align-items:center;margin-top:12px}.check input{width:auto}.hidden{display:none}.model-active{border-left:4px solid #4f46e5}.row{display:flex;flex-wrap:wrap;gap:8px}.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#3730a3;font-size:12px;margin:2px}.result{line-height:1.55;min-height:100px}.result h1,.result h2,.result h3{margin:18px 0 8px}.result table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px}.result th,.result td{border:1px solid #9aa3b5;padding:8px;vertical-align:top}.result th{font-weight:700}.result ul,.result ol{padding-left:24px}.source{font-size:12px;background:#f8fafc;border-left:3px solid #818cf8;padding:8px;margin:5px 0}.loading{padding:12px;background:#eef2ff;border-radius:10px}.hint{background:#fff7ed;padding:10px;border-radius:10px;font-size:13px;margin-top:10px}
-@media print{header,.card:not(#resultCard){display:none!important}body{background:#fff}.card{box-shadow:none}.result{font-size:12pt}}
-</style>
-
-<style id="educpro-commercial-style">
 :root{
-  --ep-primary:#4f46e5;--ep-primary-2:#7c3aed;--ep-ink:#172033;--ep-muted:#667085;
-  --ep-bg:#f4f6fb;--ep-card:#ffffff;--ep-border:#e4e7ec;
+  --bg:#f5f7fb;
+  --card:#fff;
+  --text:#182230;
+  --muted:#667085;
+  --line:#e5e7eb;
+  --primary:#4f46e5;
+  --primary-dark:#3730a3;
+  --soft:#eef2ff;
+  --ok:#067647;
+  --ok-bg:#ecfdf3;
+  --err:#b42318;
+  --err-bg:#fef3f2;
 }
-body{background:linear-gradient(180deg,#f8f9fd 0,#f4f6fb 100%);color:var(--ep-ink)}
-header{position:relative;overflow:hidden;padding:28px 18px 24px;background:linear-gradient(135deg,#fff 0%,#eef2ff 100%);border-bottom:1px solid var(--ep-border)}
-header:after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;right:-100px;top:-150px;background:rgba(124,58,237,.10)}
-.brand-logo{width:min(300px,68vw);max-height:180px;position:relative;z-index:1}
-.brand-version{position:relative;z-index:1;color:#4f46e5}
-main{max-width:1100px;padding:16px 18px 36px}
-.card{border:1px solid var(--ep-border);box-shadow:0 8px 28px rgba(16,24,40,.06);transition:transform .15s ease,box-shadow .15s ease}
-.card:hover{box-shadow:0 12px 34px rgba(16,24,40,.08)}
-.option{border-color:var(--ep-border);transition:.15s ease}
-.option:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(79,70,229,.10)}
-button{background:linear-gradient(135deg,var(--ep-primary),var(--ep-primary-2));box-shadow:0 5px 12px rgba(79,70,229,.18)}
-.secondary{background:#eef2ff;color:#4338ca;box-shadow:none}
-.ep-hero{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;align-items:stretch;margin:8px 0 16px}
-.ep-hero-copy{background:linear-gradient(135deg,#111827,#312e81);color:#fff;border-radius:22px;padding:28px;box-shadow:0 14px 34px rgba(31,41,55,.18)}
-.ep-hero-copy h2{font-size:clamp(28px,4vw,42px);line-height:1.05;margin:0 0 12px}
-.ep-hero-copy p{font-size:16px;line-height:1.55;opacity:.9;margin:0 0 18px}
-.ep-pills{display:flex;flex-wrap:wrap;gap:8px}
-.ep-pill{display:inline-flex;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.12);font-size:12px}
-.ep-hero-side{background:#fff;border:1px solid var(--ep-border);border-radius:22px;padding:22px;box-shadow:0 10px 26px rgba(16,24,40,.06)}
-.ep-hero-side h3{margin-top:0}
-.ep-hero-side ul{padding-left:20px;line-height:1.8}
-.ep-share{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.ep-share button{margin-top:0}
-.ep-free{border:1px solid #c7d2fe;background:#eef2ff}
-.ep-section-title{margin-bottom:6px}
-.ep-section-sub{margin-top:0;color:var(--ep-muted)}
-.ep-footer{margin:28px 0 8px;text-align:center;color:var(--ep-muted);font-size:12px}
-@media(max-width:760px){
- .ep-hero{grid-template-columns:1fr}
- .ep-hero-copy{padding:22px}
- main{padding:12px 12px 28px}
- .card{padding:16px}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+header{
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  padding:14px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+}
+
+.logo-wrap{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logo{
+  width:48px;
+  height:48px;
+  flex:none;
+}
+
+.brand{
+  font-size:20px;
+  font-weight:800;
+}
+
+.subtitle{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.badge{
+  background:var(--soft);
+  color:var(--primary-dark);
+  padding:7px 10px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+main{
+  max-width:1100px;
+  margin:25px auto;
+  padding:0 16px;
+}
+
+.hero{
+  margin-bottom:18px;
+}
+
+.hero h1{
+  font-size:32px;
+  margin:0 0 7px;
+}
+
+.hero p{
+  color:var(--muted);
+  margin:0;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:18px;
+  box-shadow:0 5px 20px #00000008;
+}
+
+h2{
+  margin:0 0 8px;
+  font-size:21px;
+}
+
+h3{
+  margin:0 0 7px;
+}
+
+.small{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.45;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+label{
+  font-weight:700;
+  font-size:14px;
+  display:block;
+  margin-bottom:7px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid #d0d5dd;
+  border-radius:10px;
+  font-size:15px;
+  background:#fff;
+}
+
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
+.buttons{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+  flex-wrap:wrap;
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:12px 16px;
+  background:var(--primary);
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:wait;
+}
+
+button.secondary{
+  background:var(--soft);
+  color:var(--primary-dark);
+}
+
+button.ghost{
+  background:#fff;
+  color:var(--primary-dark);
+  border:1px solid #c7d2fe;
+}
+
+button.danger{
+  background:#fee2e2;
+  color:#991b1b;
+  padding:7px 10px;
+  font-size:12px;
+}
+
+.library-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:12px;
+  margin-top:16px;
+}
+
+.library-card{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+  background:#fff;
+}
+
+.library-title{
+  font-weight:800;
+  font-size:15px;
+  margin-bottom:5px;
+}
+
+.library-select{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  margin:0 0 7px;
+  cursor:pointer;
+}
+
+.library-select input{
+  width:20px;
+  height:20px;
+  margin:0;
+  flex:none;
+  accent-color:var(--primary);
+}
+
+.library-select span{
+  font-weight:800;
+  font-size:15px;
+  line-height:1.3;
+}
+
+.library-description{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.4;
+  min-height:34px;
+}
+
+.library-upload{
+  margin-top:10px;
+}
+
+.library-upload input{
+  font-size:12px;
+  padding:9px;
+}
+
+.library-files{
+  margin-top:8px;
+}
+
+.library-file{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:7px 0;
+  border-bottom:1px solid var(--line);
+  font-size:12px;
+}
+
+.library-file:last-child{
+  border-bottom:0;
+}
+
+.library-file-name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.library-info{
+  margin-top:14px;
+  padding:12px;
+  border-radius:10px;
+  background:#f8fafc;
+  color:#475467;
+  font-size:13px;
+}
+
+.material-box{
+  margin-top:18px;
+  padding:16px;
+  border:1px dashed #cbd5e1;
+  border-radius:13px;
+  background:#f8fafc;
+}
+
+.material{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:9px 0;
+  border-bottom:1px solid #e5e7eb;
+}
+
+.material:last-child{
+  border-bottom:0;
+}
+
+.state{
+  padding:12px;
+  border-radius:10px;
+  background:#f8fafc;
+}
+
+.state.ok{
+  background:var(--ok-bg);
+  color:var(--ok);
+}
+
+.state.err{
+  background:var(--err-bg);
+  color:var(--err);
+}
+
+#resultadoTexto{
+  white-space:pre-wrap;
+  line-height:1.6;
+  min-height:20px;
+}
+
+.plans{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.plan{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:14px;
+}
+
+
+.plan a{display:block;margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--primary);color:#fff;text-decoration:none;text-align:center;font-weight:700}.plan a:hover{opacity:.9}
+
+.price{
+  font-weight:800;
+  font-size:18px;
+}
+
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:25px;
+}
+
+@media(max-width:700px){
+
+  header{
+    padding:12px 14px;
+  }
+
+  .logo{
+    width:44px;
+    height:44px;
+  }
+
+  .brand{
+    font-size:18px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .plans{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .hero h1{
+    font-size:27px;
+  }
+
+  .badge{
+    display:block;
+    font-size:10px;
+  }
+
+  .library-grid{
+    grid-template-columns:1fr;
+  }
+
 }
 </style>
 </head>
+
 <body>
-<header class="brand-header">
-  <img class="brand-logo" src="/assets/educ-pro-ia-logo.png" alt="Educ.Pro IA — Asistente inteligente para docentes">
-  <div class="brand-version">v21 · Plataforma web para docentes</div>
+
+<header>
+
+<div class="logo-wrap">
+
+<svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Logo Edu.sistem Pro IA">
+
+  <defs>
+    <lineargradient id="eduGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4f46e5"></stop>
+      <stop offset="100%" stop-color="#7c3aed"></stop>
+    </lineargradient>
+  </defs>
+
+  <rect x="4" y="4" width="92" height="92" rx="24" fill="url(#eduGradient)"></rect>
+
+  <path d="M20 34 L50 20 L80 34 L50 48 Z" fill="#ffffff"></path>
+
+  <path d="M30 43 V61 C30 69 39 76 50 76 C61 76 70 69 70 61 V43" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"></path>
+
+  <circle cx="50" cy="60" r="5" fill="#ffffff"></circle>
+
+</svg>
+
+<div>
+  <div class="brand">Edu.sistem Pro IA</div>
+  <div class="subtitle">Asistente inteligente para docentes</div>
+</div>
+
+</div>
+
+<div id="status" class="badge" style="background: rgb(236, 253, 243); color: rgb(6, 118, 71);">🟢 Servidor conectado</div>
+
 </header>
+
 <main>
 
-<section class="ep-hero">
-  <div class="ep-hero-copy">
-    <div class="ep-pill" style="margin-bottom:12px">EDUC.PRO IA · versión web</div>
-    <h2>Tu asistente inteligente para docentes.</h2>
-    <p>Creá planificaciones, proyectos, secuencias, evaluaciones y materiales con una estructura pensada para el trabajo docente.</p>
-    <div class="ep-pills">
-      <span class="ep-pill">📚 Biblioteca</span>
-      <span class="ep-pill">🤖 IA real</span>
-      <span class="ep-pill">📄 Modelos y tablas</span>
-      <span class="ep-pill">📱 Adaptada al celular</span>
-    </div>
-    <div class="row" style="margin-top:18px">
-      <button type="button" onclick="openAuth('register')">✨ Probar gratis</button>
-      <button type="button" class="secondary" onclick="showPlans()">💳 Ver planes</button>
-    </div>
-  </div>
-  <div class="ep-hero-side">
-    <h3>🚀 Probala y compartila</h3>
-    <p class="small">Educ.Pro IA funciona desde el navegador. Podés compartir el enlace con otros docentes y, desde el celular, agregarla a la pantalla de inicio.</p>
-    <div class="ep-share">
-      <button type="button" onclick="shareEducPro()">📤 Compartir</button>
-      <button type="button" class="secondary" onclick="copyEducProLink()">🔗 Copiar enlace</button>
-    </div>
-    <p id="epShareStatus" class="small" style="margin-bottom:0"></p>
-  </div>
-</section>
-<section class="card ep-free">
-  <h2 class="ep-section-title">🆓 Empezá gratis</h2>
-  <p class="ep-section-sub">Creá tu cuenta sin costo y probá las herramientas disponibles. Los planes pagos están preparados para activarse mediante Mercado Pago cuando configures las credenciales del servidor.</p>
-  <div class="row">
-    <button type="button" onclick="openAuth('register')">Crear cuenta gratis</button>
-    <button type="button" class="secondary" onclick="showPlans()">Comparar planes</button>
-    <button id="epInstallBtn" type="button" class="secondary hidden" onclick="installEducPro()">📱 Instalar en el celular</button>
-  </div>
-</section>
-<section class="card" id="accountCard"><h2>👤 Cuenta y plan</h2><div id="accountStatus" class="status">No hay una sesión iniciada.</div><div id="accountActions" class="row"><button type="button" onclick="openAuth('login')">🔐 Iniciar sesión</button><button type="button" class="secondary" onclick="openAuth('register')">✨ Crear cuenta gratis</button><button type="button" class="secondary" onclick="showPlans()">💳 Ver planes</button></div></section>
-<section class="card" id="connectionCard"><h2>🔌 Estado de conexión</h2><div id="connectionStatus" class="status">Comprobando servidor…</div><button type="button" class="secondary" onclick="checkConnection()">🔄 Probar conexión</button></section>
-<section class="card"><h2>¿Qué querés crear?</h2><div class="grid">
-<div class="option" onclick="setType('Planificación anual')">📚<br>Planificación anual</div>
-<div class="option" onclick="setType('Proyecto')">📝<br>Proyecto</div>
-<div class="option" onclick="setType('Secuencia didáctica')">🎯<br>Secuencia didáctica</div>
-<div class="option" onclick="setType('Evaluación')">📋<br>Evaluación</div>
-<div class="option" onclick="setType('Material')">🎨<br>Material</div>
-</div><p class="small" id="selected">Seleccionaste: Planificación anual</p></section>
+<section class="hero">
 
-<section class="card"><h2>📚 Datos educativos</h2>
-<label>Tipo</label><input id="type" value="Planificación anual" readonly>
-<label>Nivel</label><select id="level"><option>Inicial</option><option selected>Primaria</option><option>Secundaria</option><option>Superior</option></select>
-<label>Grado / curso</label><input id="grade" placeholder="Ej.: 4.º grado">
-<label>Área / Materia</label><input id="subject" placeholder="Ej.: Ciencias Naturales">
-<label>Tema</label><input id="topic" placeholder="Ej.: Sistema Solar">
-<label>Tipo de documento curricular prioritario</label><select id="docType"><option>Diseño Curricular</option><option>Documento de actualización curricular</option><option>Ejemplo de planificación</option><option>Ejemplo de secuencia didáctica</option><option>Otro material</option></select>
-<label>Duración</label><input id="duration" placeholder="Ej.: marzo a noviembre">
-<label>Indicaciones adicionales</label><textarea id="extra">fundamentación, objetivos, capacidades, contenidos, estrategias, recursos, evaluación y criterios de logro</textarea>
+<h1>Creá tu trabajo docente con IA</h1>
+
+<p>
+Simple, rápido y pensado para usar desde el celular.
+</p>
+
 </section>
 
-<section class="card"><h2>🧩 Modelo institucional</h2>
-<p>Esta versión incorpora el modelo que me pasaste. Para <b>Planificación anual</b> y <b>Secuencia didáctica</b> se usa como estructura base; para Proyecto, Evaluación y Material se desactiva para evitar mezclar formatos. encabezado institucional, unidades, capacidades, aprendizajes y contenidos, contenidos prioritarios, ejes, proyecto institucional, programas y bibliografía para docente/estudiante.</p>
-<div class="status">📘 <b>Modelo cargado:</b> Programa de Educación Artística – Música · I.P.E.M. Nº 287 “Leopoldo Lugones”</div>
-<div class="check"><input id="useBuiltInModel" type="checkbox" checked><label for="useBuiltInModel" style="margin:0">Usar este modelo como estructura base</label></div>
-<button type="button" class="secondary" onclick="showModelArchitecture()">👁️ Ver arquitectura</button>
-<div id="modelArchitecture" class="hint hidden"></div></section>
 
-<section class="card"><h2>📎 Documento modelo</h2><p>Subí un Word/PDF/TXT/HTML como ejemplo. La IA intentará conservar la arquitectura del documento: títulos, orden, bloques y tablas detectadas.</p>
-<div class="upload"><input id="referenceFile" type="file" accept=".txt,.html,.htm,.csv,.pdf,.docx" onchange="handleReference(this.files[0])"><p class="small">Para reproducir tablas, el mejor resultado se obtiene con .docx o .html.</p></div>
-<div id="fileList" class="file-list"></div><div class="check"><input id="useFormat" type="checkbox" checked><label for="useFormat" style="margin:0">Usar este documento como modelo de estructura</label></div><div id="referenceStatus" class="status small">No hay modelo cargado.</div></section>
+<section id="biblioteca" class="card">
 
-<section class="card"><h2>📚 Biblioteca inteligente</h2><p>Guardá Diseños Curriculares, documentos oficiales y ejemplos. Educ.Pro IA buscará <b>fragmentos relacionados</b> con nivel, curso, área y tema en lugar de enviar toda la biblioteca.</p>
-<div class="upload"><input id="libraryFiles" type="file" multiple accept=".txt,.html,.htm,.csv,.pdf,.docx"><p class="small">Después de seleccionar los archivos, elegí el tipo de material y guardalos.</p></div>
-<label>Clasificación para los archivos seleccionados</label><select id="libraryDocType"><option>Diseño Curricular</option><option>Documento de actualización curricular</option><option>Ejemplo de planificación</option><option>Ejemplo de secuencia didáctica</option><option>Otro material</option></select>
-<button type="button" onclick="addSelectedLibraryFiles()">➕ Agregar a biblioteca</button><div id="libraryList" class="file-list"></div><button type="button" class="secondary" onclick="dedupeLibrary()">🧹 Limpiar duplicados</button><button type="button" class="secondary" onclick="clearLibrary()">Vaciar biblioteca</button></section>
+<h2>📚 Biblioteca Curricular Córdoba</h2>
 
+<p class="small">
+Elegí una o varias referencias. Edu.sistem Pro IA las consultará como contexto curricular al generar tu trabajo. No tenés que descargar ni subir estos documentos.
+</p>
 
-<section class="card" id="schoolResources">
-  <h2>📅 Efemérides, actos, música y videos</h2>
-  <p class="ep-section-sub">Un espacio rápido para preparar propuestas escolares sin tener que empezar de cero.</p>
-  <div class="grid">
-    <div class="option" onclick="openSchoolModule('efemerides')">📅<br><b>Efemérides</b><br><span class="small">Fechas y propuestas</span></div>
-    <div class="option" onclick="openSchoolModule('actos')">🎭<br><b>Actos escolares</b><br><span class="small">Guiones y organización</span></div>
-    <div class="option" onclick="openSchoolModule('musica')">🎵<br><b>Música</b><br><span class="small">Canciones y actividades</span></div>
-    <div class="option" onclick="openSchoolModule('videos')">🎬<br><b>Videos</b><br><span class="small">Recursos audiovisuales</span></div>
-  </div>
-  <div id="schoolModulePanel" class="hint hidden" style="margin-top:14px"></div>
+<div class="library-grid">
+
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Inicial"> <span>🟣 Inicial</span></label><div class="library-description">Referencias curriculares para Educación Inicial.</div></div>
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Primaria"> <span>🔵 Primaria</span></label><div class="library-description">Referencias curriculares para Educación Primaria.</div></div>
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Secundaria"> <span>🟢 Secundaria</span></label><div class="library-description">Referencias curriculares para Educación Secundaria.</div></div>
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Superior"> <span>🟠 Superior</span></label><div class="library-description">Referencias para Educación Superior.</div></div>
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Educación Especial"> <span>🟡 Educación Especial</span></label><div class="library-description">Referencias y orientaciones para esta modalidad.</div></div>
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Jóvenes y Adultos"> <span>🟤 Jóvenes y Adultos</span></label><div class="library-description">Referencias para la modalidad de Jóvenes y Adultos.</div></div>
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Educación Rural"> <span>🌾 Educación Rural</span></label><div class="library-description">Referencias específicas para Educación Rural.</div></div>
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Técnico Profesional"> <span>🔧 Educación Técnico Profesional</span></label><div class="library-description">Materiales y referencias para la Educación Técnico Profesional.</div></div>
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Progresiones"> <span>📈 Progresiones</span></label><div class="library-description">Metas, aprendizajes, contenidos e indicadores de las Progresiones de Aprendizaje.</div></div>
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Aprendizajes y Contenidos Fundamentales"> <span>🎯 Aprendizajes y Contenidos Fundamentales</span></label><div class="library-description">Referencia vinculada a aprendizajes y contenidos curriculares.</div></div>
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Actualización curricular"> <span>📘 Actualización curricular</span></label><div class="library-description">Referencias de actualización curricular.</div></div>
+<div class="library-card"><label class="library-select"><input type="checkbox" class="biblioteca-check" value="Referencias 2026"> <span>🏛️ Referencias 2026</span></label><div class="library-description">Referencias identificadas para el ciclo 2026.</div></div>
+
+</div>
+
+<div id="bibliotecaSeleccionadas" class="library-info">📚 No seleccionaste referencias todavía.</div>
+
+<div class="library-info">
+📌 <strong>Cómo funciona:</strong> las referencias oficiales disponibles se consultan desde el servidor cuando generás el trabajo. La aplicación no necesita que descargues los PDF ni que los subas a GitHub.
+</div>
+
+<div class="material-box">
+<h3>👨‍🏫 Materiales que carga el docente</h3>
+<p class="small">Acá podés agregar tus propios diseños, planificaciones, secuencias, programas, ejemplos o documentos institucionales.</p>
+<input id="archivo" type="file" accept=".pdf,.docx,.txt,.md,.csv,.html,.htm" multiple>
+<div class="buttons"><button type="button" class="secondary" onclick="agregarMaterial()">+ Agregar material</button></div>
+<div id="materialesLista"><p class="small">Todavía no agregaste materiales.</p></div>
+</div>
+
 </section>
 
-<section class="card"><h2>📊 Formato de salida</h2><div class="grid">
-<div class="option" onclick="insertTemplate('sinoptico')">🧩<br>Cuadro sinóptico</div><div class="option" onclick="insertTemplate('comparativo')">↔️<br>Comparativo</div><div class="option" onclick="insertTemplate('tabla')">📋<br>Tabla</div>
-</div><div class="check"><input id="modelMode" type="checkbox" checked><label for="modelMode" style="margin:0">Mantener estructura del modelo y convertir cuadros en tablas editables</label></div><div class="hint">La IA usa tablas Markdown cuando corresponde y la app las convierte automáticamente en tablas editables para copiar a Word.</div></section>
 
-<section class="card"><button type="button" onclick="generate()">✨ Generar con IA real</button></section>
-<section class="card" id="resultCard"><h2>Resultado</h2><div id="statusBox"></div><div id="result" class="result">Tu propuesta aparecerá acá.</div><div class="row"><button type="button" class="secondary" onclick="copyRich()">📋 Copiar para Word</button><button type="button" class="secondary" onclick="downloadDoc()">📄 Descargar documento</button><button type="button" class="secondary" onclick="window.print()">🖨️ Imprimir / PDF</button></div><div id="sources" style="margin-top:15px"></div></section>
+<section id="crear" class="card">
+
+<h2>✨ ¿Qué querés crear?</h2>
+
+<div class="grid">
+<div>
+<label>Provincia</label>
+<select id="provincia">
+<option value="Buenos Aires">Buenos Aires</option><option value="Catamarca">Catamarca</option><option value="Chaco">Chaco</option><option value="Chubut">Chubut</option><option value="Ciudad Autónoma de Buenos Aires">Ciudad Autónoma de Buenos Aires</option><option value="Córdoba" selected>Córdoba</option><option value="Corrientes">Corrientes</option><option value="Entre Ríos">Entre Ríos</option><option value="Formosa">Formosa</option><option value="Jujuy">Jujuy</option><option value="La Pampa">La Pampa</option><option value="La Rioja">La Rioja</option><option value="Mendoza">Mendoza</option><option value="Misiones">Misiones</option><option value="Neuquén">Neuquén</option><option value="Río Negro">Río Negro</option><option value="Salta">Salta</option><option value="San Juan">San Juan</option><option value="San Luis">San Luis</option><option value="Santa Cruz">Santa Cruz</option><option value="Santa Fe">Santa Fe</option><option value="Santiago del Estero">Santiago del Estero</option><option value="Tierra del Fuego, Antártida e Islas del Atlántico Sur">Tierra del Fuego, Antártida e Islas del Atlántico Sur</option><option value="Tucumán">Tucumán</option>
+</select>
+</div>
+
+
+
+<div>
+
+<label>Tipo de trabajo</label>
+
+<select id="tipo">
+
+<option value="anual">
+Planificación anual
+</option>
+
+<option value="secuencia">
+Secuencia didáctica
+</option>
+
+<option value="proyecto">
+Proyecto
+</option>
+
+<option value="rubrica">
+Rúbrica
+</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>Nivel</label>
+
+<select id="nivel">
+
+<option>Inicial</option>
+<option selected="">Primaria</option>
+<option>Secundaria</option>
+<option>Superior</option>
+
+</select>
+
+</div>
+
+
+<div>
+
+<label>Grado / Curso</label>
+
+<input id="grado" placeholder="Ej.: 5.º grado">
+
+</div>
+
+
+<div>
+
+<label>Área / Materia</label>
+
+<input id="area" placeholder="Ej.: Lengua">
+
+</div>
+
+
+<div class="full">
+
+<label>Tema</label>
+
+<input id="tema" placeholder="¿Sobre qué necesitás trabajar?">
+
+</div>
+
+
+<div>
+
+<label>Duración</label>
+
+<input id="duracion" placeholder="Ej.: 4 semanas">
+
+</div>
+
+
+<div class="full">
+
+<label>
+¿Cómo querés que lo realice?
+</label>
+
+<textarea id="indicaciones" placeholder="Ej.: incluir fundamentación, objetivos, actividades y evaluación, organizado en tablas."></textarea>
+
+<p class="small">
+Podés escribirlo con tus palabras.
+</p>
+
+</div>
+
+</div>
+
+
+<div class="buttons">
+
+<button id="btnGenerar" onclick="generar()">
+
+✨ Crear con Gemini
+
+</button>
+
+<button class="secondary" onclick="limpiar()">
+
+Limpiar
+
+</button>
+
+</div>
+
+</section>
+
+
+<section id="resultado" class="card">
+
+<h2>📄 Resultado</h2>
+
+<div id="estado" class="state">
+
+Todavía no generaste un trabajo.
+
+</div>
+
+<br>
+
+<div id="resultadoTexto"></div>
+
+<div class="buttons">
+
+<button onclick="copiar()">
+Copiar
+</button>
+
+<button class="secondary" onclick="descargar()">
+Descargar .txt
+</button>
+
+<button class="secondary" onclick="descargarWord()">
+Descargar Word
+</button>
+
+<button class="ghost" onclick="imprimir()">
+Imprimir / PDF
+</button>
+
+<button class="ghost" onclick="compartir()">
+Compartir
+</button>
+
+</div>
+
+</section>
+
+
+<section id="cuenta" class="card">
+<h2>👤 Mi cuenta</h2>
+<p class="small">Base SaaS: podés identificar tu sesión y ver el plan activo. La conexión de cuentas persistentes se habilita con Supabase en las variables de Vercel.</p>
+<div class="grid">
+<div>
+<label>Correo del docente</label>
+<input id="cuentaEmail" type="email" placeholder="docente@ejemplo.com">
+</div>
+<div>
+<label>Plan</label>
+<select id="cuentaPlan">
+<option value="gratis">Gratis · 5 generaciones/mes</option>
+<option value="docente">Docente · 100 generaciones/mes</option>
+<option value="profesional">Profesional · 300 generaciones/mes</option>
+<option value="institucion">Institución · 1.000 generaciones/mes</option>
+</select>
+</div>
+</div>
+<div class="buttons">
+<button type="button" onclick="guardarCuenta()">Guardar cuenta en este dispositivo</button>
+<button type="button" class="secondary" onclick="borrarCuenta()">Cerrar sesión local</button>
+</div>
+<div id="cuentaEstado" class="state">Modo visitante. Tus datos no se envían hasta generar.</div>
+</section>
+
+<section id="planes" class="card">
+<h2>💳 Planes Edu.sistem Pro IA</h2>
+<p class="small">Elegí la modalidad que mejor se adapte a tu uso.</p>
+<div class="plans">
+<div class="plan"><h3>🆓 Gratis</h3><div class="price">$0</div><p>5 generaciones por mes.</p></div>
+<div class="plan"><h3>👩‍🏫 Docente</h3><div class="price">$4.999 / mes</div><p>100 generaciones por mes.</p><a href="https://mpago.la/2X9cT72" target="_blank" rel="noopener noreferrer">Suscribirme</a></div>
+<div class="plan"><h3>💼 Profesional</h3><div class="price">$8.999 / mes</div><p>300 generaciones por mes.</p><a href="https://mpago.la/142hjdM" target="_blank" rel="noopener noreferrer">Suscribirme</a></div>
+<div class="plan"><h3>🏫 Institución</h3><div class="price">$24.999 / mes</div><p>1.000 generaciones por mes.</p><a href="https://mpago.la/2ECLDFR" target="_blank" rel="noopener noreferrer">Suscribirme</a></div>
+</div>
+</section>
+
 </main>
 
-<div class="ep-footer">
-  <b>Educ.Pro IA</b> · Asistente inteligente para docentes · Plataforma web
-</div>
-<script>
-var selectedType='Planificación anual';
-var reference={name:'',type:'',text:'',headings:[],tables:[],sections:[]};
-var builtInModel={
- name:'Modelo institucional – Programa de Educación Artística Música – I.P.E.M. Nº 287',
- headings:['PROGRAMA DE Educación Artística Música','DOCENTE','CURSO / TURNO','AÑO LECTIVO','ESCUELA','UNIDADES','CAPACIDADES PARA DESARROLLAR','APRENDIZAJES Y CONTENIDOS','CONTENIDOS PRIORITARIOS','Eje nº1: La música en relación con las prácticas del lenguaje musical','Eje nº2: La música en relación con la contextualización','PROYECTO INSTITUCIONAL','PROGRAMAS','BIBLIOGRAFÍA','PARA EL DOCENTE','PARA EL ESTUDIANTE'],
- tables:[['CAMPO','VALOR'],['DOCENTE',''],['CURSO',''],['TURNO',''],['AÑO LECTIVO',''],['ESCUELA','']],
- architecture:'1. Encabezado: PROGRAMA + espacio curricular Música\n2. Datos del docente\n3. Curso y turno\n4. Año lectivo\n5. Escuela\n6. UNIDADES\n7. CAPACIDADES PARA DESARROLLAR\n8. APRENDIZAJES Y CONTENIDOS\n9. CONTENIDOS PRIORITARIOS\n10. Eje nº1: La música en relación con las prácticas del lenguaje musical\n11. Desarrollo de aprendizajes/contenidos del eje 1\n12. Desarrollo de contenidos prioritarios del eje 1\n13. Eje nº2: La música en relación con la contextualización\n14. Desarrollo del eje 2\n15. PROYECTO INSTITUCIONAL\n16. PROGRAMAS\n17. BIBLIOGRAFÍA\n18. PARA EL DOCENTE\n19. PARA EL ESTUDIANTE',
- text:`MODELO DE ARQUITECTURA INSTITUCIONAL\nPROGRAMA DE Educación Artística Música\nDOCENTE: ____________________\nCURSO: 1ª    TURNO: tarde; mañana\nAÑO LECTIVO: 2026\nESCUELA: ____________________\n\nUNIDADES\n\nCAPACIDADES PARA DESARROLLAR\n\nAPRENDIZAJES Y CONTENIDOS\n\nCONTENIDOS PRIORITARIOS\n\nEje nº1: La música en relación con las prácticas del lenguaje musical\n- Improvisaciones individuales o grupales y generación de frases musicales.\n- Vocalizaciones grupales y técnicas básicas de respiración, emisión y resonancia.\n- Exploración de extensiones vocales y elección del registro cómodo.\n- Formas de emisión vocal e intenciones expresivas.\n- Arreglos a dos o más voces y coordinación grupal.\n- Patrones rítmicos vinculados con géneros musicales.\n\nProducción creadora atendiendo a: voz hablada y cantada; instrumentos convencionales, eléctricos, electrónicos, acústicos y digitales; ritmo; melodía; armonía.\n\n- Desarrollo de la expresión vocal como herramienta para la construcción de identidades.\n- Conformación de pequeñas agrupaciones corales a dos o tres voces.\n- Experiencias de digitalización del sonido y producción sonora con tecnologías.\n- Canto utilizando técnicas de respiración y vocalización.\n- Experimentación de técnicas vocales y recursos expresivos vinculados con géneros y estilos.\n- Ensambles vocales e instrumentales y creación colaborativa de arreglos sencillos.\n- Aprendizaje de un instrumento y ejercitación de interpretaciones simples.\n- Conformación de bandas rítmicas y de percusión.\n\nEje nº2: La música en relación con la contextualización\n- Reconocimiento y análisis del rol de la música en medios de difusión y comunicación.\n- Aproximación a profesionales de la música en distintos ámbitos.\n\nPROYECTO INSTITUCIONAL: JORNADA DE PUERTAS ABIERTAS\n\nPROGRAMAS: FERIA DE CIENCIAS, TECNOLOGÍAS, ARTES, MOVIMIENTO E INNOVACIÓN; Olimpiada Cordobesa de Matemática; Festival de la Palabra.\n\nBIBLIOGRAFÍA\nPARA EL DOCENTE\n- Gobierno de la Provincia de Córdoba. Ministerio de Educación. Mejora en los aprendizajes en lengua, matemática y ciencias: capacidades fundamentales. Fascículo 22.\n- Capacidades fundamentales.\n- Diseños Curriculares.\n- Documentos de actualización curricular.\n- Educación para el Desarrollo Sostenible.\n- Educación STEAM.\n- ESI.\n\nPARA EL ESTUDIANTE\n- Educación musical 3, Anahí Villarruel. Editorial AZ.\n- Comunicación sonora, Ana Paulinelli. Editorial IES Siglo 21.\n- Elementos de la composición musical 1, Cristina Gordillo de Roge. Editorial IES Siglo XX.`
-};
 
-var library=[];var pendingLibraryFiles=[];
-function el(id){return document.getElementById(id)}
-function setType(t){selectedType=t;el('type').value=t;el('selected').textContent='Seleccionaste: '+t;}
-function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-async function extractDocument(file){
- if(!file)return {text:'',headings:[],tables:[]}; const name=file.name.toLowerCase();
- if(name.endsWith('.txt')||name.endsWith('.csv')||name.endsWith('.html')||name.endsWith('.htm')){const raw=await file.text();const temp=document.createElement('div');temp.innerHTML=raw;return {text:temp.innerText||raw,headings:[...temp.querySelectorAll('h1,h2,h3,h4,h5,h6')].map(x=>x.innerText.trim()).filter(Boolean),tables:[...temp.querySelectorAll('table')].map(t=>[...t.rows].map(r=>[...r.cells].map(c=>c.innerText.trim())))};}
- if(name.endsWith('.docx')){const ab=await file.arrayBuffer();const out=await mammoth.convertToHtml({arrayBuffer:ab});const temp=document.createElement('div');temp.innerHTML=out.value;return {text:temp.innerText,headings:[...temp.querySelectorAll('h1,h2,h3,h4,h5,h6')].map(x=>x.innerText.trim()).filter(Boolean),tables:[...temp.querySelectorAll('table')].map(t=>[...t.rows].map(r=>[...r.cells].map(c=>c.innerText.trim())))};}
- if(name.endsWith('.pdf')){const pdfjs=await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs');pdfjs.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';const ab=await file.arrayBuffer();const pdf=await pdfjs.getDocument({data:ab}).promise;let text='';for(let i=1;i<=pdf.numPages;i++){const page=await pdf.getPage(i);const c=await page.getTextContent();text+='\n[Página '+i+']\n'+c.items.map(x=>x.str).join(' ')}return {text:text.trim(),headings:[],tables:[]};}
- return {text:'',headings:[],tables:[]};
-}
-function buildSections(text,heads){var lines=(text||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean),out=[];if(!heads.length)return lines.slice(0,120).map(x=>({heading:'',text:x}));var current=-1;for(const line of lines){const idx=heads.indexOf(line);if(idx>=0){out.push({heading:line,text:''});current=out.length-1}else if(current>=0)out[current].text+=(out[current].text?'\n':'')+line;}return out;}
-async function handleReference(file){if(!file)return;el('referenceStatus').textContent='Leyendo modelo…';try{const d=await extractDocument(file);reference={name:file.name,type:file.type,text:d.text,headings:d.headings||[],tables:d.tables||[],sections:buildSections(d.text,d.headings||[])};el('fileList').innerHTML='<div class="file-item"><b>'+escapeHtml(file.name)+'</b> · '+reference.text.length+' caracteres · '+reference.tables.length+' tabla(s) detectada(s)</div>';el('referenceStatus').textContent='Modelo cargado correctamente.';}catch(e){el('referenceStatus').textContent='No se pudo leer: '+e.message}}
-function structureContext(){
- let s='';
- const useBuilt=el('useBuiltInModel')&&el('useBuiltInModel').checked;
- if(useBuilt){
-   s+='\n=== MODELO INSTITUCIONAL BASE (ARQUITECTURA OBLIGATORIA) ===\n'+builtInModel.architecture+'\n';
-   s+='SECCIONES EN ORDEN: '+builtInModel.headings.join(' | ')+'\n';
- }
- if(!el('useFormat').checked||!reference.text)return s;
- s+='\n=== ESTRUCTURA DEL DOCUMENTO MODELO SUBIDO ===\n';
- if(reference.headings.length)s+='TÍTULOS EN ORDEN:\n'+reference.headings.map((x,i)=>(i+1)+'. '+x).join('\n')+'\n';
- if(reference.tables.length)reference.tables.slice(0,10).forEach((t,i)=>{s+='TABLA '+(i+1)+': '+t.length+' filas x '+Math.max(...t.map(r=>r.length),0)+' columnas\nENCABEZADOS: '+(t[0]||[]).join(' | ')+'\n';});
- if(reference.sections.length)s+='BLOQUES:\n'+reference.sections.slice(0,50).map(x=>'['+(x.heading||'bloque')+'] '+x.text.slice(0,300)).join('\n')+'\n';
- return s;
-}
-function activeModelContext(){
- if(!(el('useBuiltInModel')&&el('useBuiltInModel').checked))return '';
- return '\n=== CONTENIDO DEL MODELO INSTITUCIONAL (USAR SOLO COMO ESTRUCTURA Y EJEMPLO) ===\n'+builtInModel.text+'\n';
-}
-function showModelArchitecture(){
- const box=el('modelArchitecture');
- box.classList.toggle('hidden');
- box.textContent=box.classList.contains('hidden')?'':builtInModel.architecture;
-}
-function tokenize(q){return q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(/[^a-z0-9ñ]+/).filter(w=>w.length>2)}
-function retrieveLibrary(query){const terms=tokenize(query);const scored=[];library.filter(f=>f.text).forEach(f=>{const chunks=f.text.match(/[\s\S]{1,1200}(?=\n|$)/g)||[f.text];chunks.forEach((chunk,i)=>{const low=chunk.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');let score=0;terms.forEach(w=>{if(low.includes(w))score+=2});const fn=tokenize(f.name).join(' ');if(fn&&terms.some(w=>fn.includes(w)))score+=4;if(f.docType===el('docType').value)score+=3;if(score>0)scored.push({score,name:f.name,docType:f.docType||'Otro material',chunk:chunk.trim(),i})})});scored.sort((a,b)=>b.score-a.score);const seen=new Set(),out=[];for(const h of scored){const key=h.name+'|'+h.i;if(!seen.has(key)){seen.add(key);out.push(h)}if(out.length>=18)break}return out;}
-function libraryContext(query){const hits=retrieveLibrary(query);if(!hits.length)return {text:'',hits:[]};return {text:'\n=== FRAGMENTOS RELEVANTES RECUPERADOS DE LA BIBLIOTECA ===\n'+hits.map((h,i)=>'['+(i+1)+'] '+h.name+' · '+h.docType+'\n'+h.chunk).join('\n\n').slice(0,42000),hits};}
-function addSelectedLibraryFiles(){const input=el('libraryFiles');if(!input.files.length){alert('Seleccioná primero uno o más archivos.');return;}const type=el('libraryDocType').value;for(const f of input.files)pendingLibraryFiles.push({file:f,docType:type});(async()=>{for(const p of pendingLibraryFiles.splice(0)){const exists=library.some(f=>f.name===p.file.name&&Number(f.size)===Number(p.file.size)&&f.docType===p.docType);if(exists)continue;try{const d=await extractDocument(p.file);library.push({name:p.file.name,size:p.file.size,type:p.file.type||'archivo',docType:p.docType,date:new Date().toLocaleString(),text:(d.text||'').slice(0,70000),headings:d.headings||[],tables:d.tables||[]})}catch(e){library.push({name:p.file.name,size:p.file.size,type:p.file.type||'archivo',docType:p.docType,date:new Date().toLocaleString(),text:''})}}try{localStorage.setItem('educpro_library',JSON.stringify(library));}catch(e){alert('La biblioteca del navegador está llena. Eliminá algún material e intentá nuevamente.');}
-input.value='';renderLibrary()})()}
-try{library=JSON.parse(localStorage.getItem('educpro_library')||'[]')}catch(e){library=[]}
-function renderLibrary(){el('libraryList').innerHTML=library.length?library.map((f,i)=>'<div class="file-item"><b>📄 '+escapeHtml(f.name)+'</b> <span class="badge">'+escapeHtml(f.docType||'Otro material')+'</span><span class="small"> · '+(f.text?f.text.length+' caracteres':'sin texto extraíble')+'</span><button type="button" class="danger" style="float:right;margin:0;padding:6px 9px" onclick="removeLibrary('+i+')">Eliminar</button></div>').join(''):'<p class="small">No hay materiales guardados.</p>'}
-function removeLibrary(i){library.splice(i,1);localStorage.setItem('educpro_library',JSON.stringify(library));renderLibrary()}function clearLibrary(){if(confirm('¿Vaciar la biblioteca?')){library=[];localStorage.removeItem('educpro_library');renderLibrary()}}
-function dedupeLibrary(){const seen=new Set();const before=library.length;library=library.filter(f=>{const k=f.name+'|'+f.size+'|'+(f.docType||'');if(seen.has(k))return false;seen.add(k);return true});localStorage.setItem('educpro_library',JSON.stringify(library));renderLibrary();alert('Se eliminaron '+(before-library.length)+' duplicados.');}
+<footer>
+Edu.sistem Pro IA · Asistente inteligente para docentes
+</footer>
 
-const efemeridesAR=[
- {m:1,d:24,n:'Día Internacional de la Educación',l:'Todos',p:'Reflexión sobre el derecho a la educación.'},
- {m:2,d:24,n:'Día de la Antártida Argentina',l:'Primaria · Secundaria',p:'Soberanía, ciencia y ambiente antártico.'},
- {m:3,d:8,n:'Día Internacional de las Mujeres',l:'Todos',p:'Igualdad, participación y derechos.'},
- {m:3,d:24,n:'Día Nacional de la Memoria por la Verdad y la Justicia',l:'Primaria · Secundaria',p:'Memoria, democracia y derechos humanos.'},
- {m:4,d:2,n:'Día del Veterano y de los Caídos en la Guerra de Malvinas',l:'Todos',p:'Memoria y soberanía.'},
- {m:4,d:22,n:'Día Internacional de la Madre Tierra',l:'Todos',p:'Cuidado del ambiente y acciones comunitarias.'},
- {m:5,d:1,n:'Día Internacional de los Trabajadores',l:'Primaria · Secundaria',p:'Trabajo, derechos y organización social.'},
- {m:5,d:11,n:'Día del Himno Nacional Argentino',l:'Todos',p:'Identidad, música e historia.'},
- {m:5,d:18,n:'Día de la Escarapela',l:'Inicial · Primaria',p:'Símbolos e identidad nacional.'},
- {m:5,d:25,n:'Revolución de Mayo',l:'Todos',p:'Historia, ciudadanía y construcción de la nación.'},
- {m:6,d:17,n:'Paso a la Inmortalidad del General Martín Miguel de Güemes',l:'Todos',p:'Historia y soberanía.'},
- {m:6,d:20,n:'Paso a la Inmortalidad del General Manuel Belgrano / Día de la Bandera',l:'Todos',p:'Símbolos, identidad y ciudadanía.'},
- {m:7,d:9,n:'Día de la Independencia',l:'Todos',p:'Independencia y construcción histórica.'},
- {m:8,d:17,n:'Paso a la Inmortalidad del General José de San Martín',l:'Todos',p:'Historia, independencia y valores ciudadanos.'},
- {m:8,d:22,n:'Día Mundial del Folklore',l:'Todos',p:'Música, danza, patrimonio e identidad cultural.'},
- {m:9,d:11,n:'Día del Maestro',l:'Todos',p:'Reconocimiento de la tarea docente.'},
- {m:9,d:21,n:'Día del Estudiante / Primavera',l:'Secundaria',p:'Convivencia y participación estudiantil.'},
- {m:10,d:12,n:'Día del Respeto a la Diversidad Cultural',l:'Todos',p:'Diversidad, diálogo intercultural y derechos.'},
- {m:11,d:10,n:'Día de la Tradición',l:'Todos',p:'Identidad cultural y expresiones artísticas.'},
- {m:11,d:20,n:'Día de la Soberanía Nacional',l:'Todos',p:'Historia y soberanía.'},
- {m:12,d:10,n:'Día de los Derechos Humanos',l:'Todos',p:'Derechos, convivencia y ciudadanía.'}
-];
-const actosBase={
- 'Inicial':['Bienvenida y presentación','Entrada de estudiantes','Canción o juego musical','Intervención artística breve','Palabras institucionales','Cierre participativo'],
- 'Primaria':['Recepción de familias','Entrada de banderas, si corresponde','Apertura y contextualización','Lectura o narración','Canción / intervención musical','Danza o representación','Palabras institucionales','Retiro / cierre'],
- 'Secundaria':['Recepción y apertura','Presentación histórica o conceptual','Intervención de estudiantes','Producción audiovisual o artística','Música en vivo o grabada','Palabras institucionales','Cierre y participación']
-};
-function openSchoolModule(kind){
- const box=el('schoolModulePanel'); box.classList.remove('hidden');
- const level=el('level')?.value||'Primaria';
- if(kind==='efemerides'){
-   const rows=efemeridesAR.map(x=>`<tr><td>${String(x.d).padStart(2,'0')}/${String(x.m).padStart(2,'0')}</td><td><b>${escapeHtml(x.n)}</b><br><span class="small">${escapeHtml(x.l)} · ${escapeHtml(x.p)}</span></td><td><button type="button" class="secondary" style="margin:0;padding:7px 10px" onclick="prepareEfemeride(${x.m},${x.d})">Usar</button></td></tr>`).join('');
-   box.innerHTML=`<b>📅 Efemérides escolares argentinas</b><p class="small">Seleccioná una fecha para llevarla directamente al generador.</p><div style="overflow:auto"><table><thead><tr><th>Fecha</th><th>Efeméride</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
- } else if(kind==='actos'){
-   const steps=actosBase[level]||actosBase.Primaria;
-   box.innerHTML=`<b>🎭 Actos escolares · ${escapeHtml(level)}</b><p class="small">Estructura rápida sugerida. Podés usarla como base y luego generar el acto completo con IA.</p><ol>${steps.map(s=>`<li>${escapeHtml(s)}</li>`).join('')}</ol><button type="button" onclick="prepareActo()">✨ Preparar acto con IA</button>`;
- } else if(kind==='musica'){
-   box.innerHTML=`<b>🎵 Música para la escuela</b><p class="small">Ideas listas para trabajar: canto colectivo, percusión corporal, repertorio argentino, himnos/canciones institucionales, paisajes sonoros, ensamble y producción digital.</p><div class="row"><button type="button" onclick="prepareMusic('canción')">🎤 Canción</button><button type="button" class="secondary" onclick="prepareMusic('percusión corporal')">🥁 Percusión corporal</button><button type="button" class="secondary" onclick="prepareMusic('ensamble')">🎼 Ensamble</button><button type="button" class="secondary" onclick="prepareMusic('acto escolar')">🎭 Música para acto</button></div>`;
- } else {
-   box.innerHTML=`<b>🎬 Videos y recursos audiovisuales</b><p class="small">La app prepara una búsqueda temática para encontrar videos educativos. Antes de usar un recurso, revisá duración, contenido, accesibilidad y adecuación al nivel.</p><div class="row"><button type="button" onclick="prepareVideo()">🔎 Buscar video sobre el tema</button><button type="button" class="secondary" onclick="openVideoSearch('educación musical '+(el('topic')?.value||''))">🎵 Buscar música</button></div><p id="videoSearchStatus" class="small"></p>`;
- }
-}
-function prepareEfemeride(m,d){
- const f=efemeridesAR.find(x=>x.m===m&&x.d===d); if(!f)return;
- el('topic').value=f.n; el('extra').value=`Preparar una propuesta escolar para la efeméride del ${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}. ${f.p} Incluir fundamentación, propósitos, objetivos, contenidos, actividades, recursos, evaluación y una propuesta de acto o intervención artística adecuada al nivel.`;
- setType('Material'); window.scrollTo({top:el('topic').getBoundingClientRect().top+window.scrollY-120,behavior:'smooth'});
-}
-function prepareActo(){
- const topic=el('topic').value||'efeméride o acto escolar'; setType('Proyecto');
- el('extra').value=`Diseñar un acto escolar completo para ${level.value}, relacionado con: ${topic}. Incluir fundamentación, propósito, organización, roles, cronograma, guion de conducción, intervenciones de estudiantes, propuesta musical, recursos, duración, accesibilidad, ensayo y cierre. Evitar estereotipos y priorizar participación estudiantil.`;
-}
-function prepareMusic(tipo){
- setType('Material'); el('subject').value=el('subject').value||'Educación Artística - Música';
- el('topic').value=el('topic').value||tipo;
- el('extra').value=`Diseñar una propuesta de ${tipo} para ${el('level').value}, ${el('grade').value||'curso a definir'}. Incluir objetivos, capacidades, repertorio o criterios para seleccionarlo, actividades paso a paso, recursos, adaptación para distintos niveles de experiencia, evaluación y una opción para acto escolar cuando corresponda.`;
-}
-function openVideoSearch(q){
- const url='https://www.youtube.com/results?search_query='+encodeURIComponent(q);
- window.open(url,'_blank','noopener,noreferrer');
- const s=el('videoSearchStatus'); if(s)s.textContent='🔎 Se abrió una búsqueda temática en YouTube. Revisá el recurso antes de compartirlo con estudiantes.';
-}
-function prepareVideo(){
- const q=[el('level').value,el('subject').value,el('topic').value].filter(Boolean).join(' ');
- openVideoSearch(q||'recursos educativos');
-}
-
-function insertTemplate(k){let v=k==='sinoptico'?'CUADRO SINÓPTICO\nTema central\n- Concepto 1\n  - Idea A\n  - Idea B\n- Concepto 2':k==='comparativo'?'CUADRO COMPARATIVO\n| ASPECTO | OPCIÓN A | OPCIÓN B |\n|---|---|---|\n| Concepto | | |\n| Características | | |\n| Ejemplos | | |':'TABLA\n| OBJETIVOS | ACTIVIDADES | RECURSOS | EVALUACIÓN |\n|---|---|---|---|\n| | | | |';const x=el('extra');x.value+=(x.value?'\n\n':'')+v;x.focus()}
-function renderAI(text){let s=escapeHtml(text);const lines=s.split('\n');let html='',inTable=false,rows=[];function flush(){if(!rows.length)return;const data=rows.filter(r=>r.trim()).map(r=>r.trim().replace(/^\|/,'').replace(/\|$/,'').split('|').map(c=>c.trim()));let start=1;if(data.length>1&&data[1].every(c=>/^:?-{3,}:?$/.test(c)))start=2;html+='<table><thead><tr>'+data[0].map(c=>'<th>'+c+'</th>').join('')+'</tr></thead><tbody>'+data.slice(start).map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</tbody></table>';rows=[];inTable=false}for(const line of lines){if(/^\|.*\|$/.test(line)){inTable=true;rows.push(line);continue}else if(inTable)flush();if(/^###\s+/.test(line))html+='<h3>'+line.replace(/^###\s+/,'')+'</h3>';else if(/^##\s+/.test(line))html+='<h2>'+line.replace(/^##\s+/,'')+'</h2>';else if(/^#\s+/.test(line))html+='<h1>'+line.replace(/^#\s+/,'')+'</h1>';else if(/^[-•]\s+/.test(line))html+='<ul><li>'+line.replace(/^[-•]\s+/,'')+'</li></ul>';else if(/^\d+[.)]\s+/.test(line))html+='<ol><li>'+line.replace(/^\d+[.)]\s+/,'')+'</li></ol>';else if(line.trim())html+='<p>'+line+'</p>'}flush();return html}
-async function checkConnection(){const box=el('connectionStatus');box.textContent='Comprobando…';try{const r=await fetch('/api/health');const d=await r.json();box.innerHTML=r.ok&&d.ok?'✅ Servidor conectado · '+(d.configured?'🟢 Gemini configurado ('+escapeHtml(d.model||'modelo configurado')+')':'🟡 Falta configurar GEMINI_API_KEY en el servidor'):'⚠️ El servidor respondió con un error.';}catch(e){box.innerHTML='🔴 No se pudo conectar con el servidor. Abrí la dirección que muestra la ventana de inicio y no haciendo doble clic en index.html.';}}
-checkConnection();
-async function generate(){const s=el('subject').value||'Área no indicada',l=el('level').value,g=el('grade').value||'Curso no indicado',t=el('topic').value||'Tema general',d=el('duration').value||(selectedType==='Planificación anual'?'marzo a noviembre':'a definir'),x=el('extra').value,dt=el('docType').value;const query=[dt,l,g,s,t].join(' ');const lib=libraryContext(query);let prompt='Generá una '+selectedType.toLowerCase()+' profesional para '+l+', '+s+', '+g+', tema: '+t+', duración: '+d+'. Material curricular prioritario: '+dt+'. Indicaciones: '+x+'.';if(selectedType==='Planificación anual')prompt+=' Debe ser una planificación anual, no una lista de actividades: incluir datos, fundamentación, propósitos, objetivos, capacidades, ejes y contenidos, contenidos prioritarios, estrategias, recursos, evaluación, criterios/indicadores, distribución temporal y articulaciones/proyectos cuando corresponda.';if(selectedType==='Secuencia didáctica')prompt+=' Debe ser una secuencia didáctica: título, fundamentación, propósitos, objetivos, contenidos/capacidades, saberes previos, inicio, desarrollo clase por clase, cierre, intervenciones docentes, recursos, evaluación, criterios e instrumentos.';prompt+=' Cuando corresponda, usar tablas Markdown con encabezados claros. No inventar citas, páginas ni atribuciones. Si el material no contiene un dato, presentarlo como propuesta pedagógica y no como contenido textual del documento.';if(selectedType==='Cuadro sinóptico')prompt+=' FORMATO OBLIGATORIO: construir un cuadro sinóptico jerárquico, claro y copiable a Word. Usar títulos, subtítulos y niveles con sangrías o listas; no entregar solamente un párrafo explicativo.';if(selectedType==='Comparativo')prompt+=' FORMATO OBLIGATORIO: construir un cuadro comparativo en una tabla Markdown completa. La primera columna debe contener los aspectos y las siguientes columnas los elementos comparados. Completar todas las celdas relevantes.';if(selectedType==='Tabla')prompt+=' FORMATO OBLIGATORIO: construir una tabla Markdown completa, con encabezados útiles y filas suficientes para el pedido. No dejar celdas vacías salvo que sea necesario para que el docente las complete.';
-if(/efemér|acto|música|musica|video/i.test(x+' '+t)){
- prompt+=' Priorizá una propuesta escolar concreta, viable y clara. Si se trata de una efeméride, incluir contexto histórico/pedagógico sin inventar datos y actividades adecuadas al nivel. Si se trata de un acto, incluir guion, tiempos, roles, intervenciones, música y recursos. Si se trata de música, proponer actividades de escucha, interpretación, creación o movimiento según el nivel. Si se trata de videos, proponer criterios de selección, preguntas para antes/durante/después y alternativas sin depender de un único enlace.';
-}
-if(el('modelMode').checked)prompt+=' Mantener la arquitectura del documento modelo. Si está activo el modelo institucional, respetar estrictamente el orden de sus secciones y la función de cada bloque. Conservar encabezado, datos institucionales como campos editables cuando corresponda, UNIDADES, CAPACIDADES PARA DESARROLLAR, APRENDIZAJES Y CONTENIDOS, CONTENIDOS PRIORITARIOS, Eje nº1, Eje nº2, PROYECTO INSTITUCIONAL, PROGRAMAS y BIBLIOGRAFÍA con PARA EL DOCENTE y PARA EL ESTUDIANTE. No copiar nombres, datos institucionales ni contenido específico del ejemplo cuando no corresponda al nuevo pedido. Si hay tablas en el modelo, reproducir su estructura con tablas Markdown. Entregar contenido listo para copiar a Word.';const context=activeModelContext()+(reference.text?'=== DOCUMENTO MODELO SUBIDO: '+reference.name+' ===\n'+reference.text.slice(0,18000)+'\n':'')+structureContext()+lib.text;el('statusBox').innerHTML='<div class="loading">⏳ Buscando fragmentos relevantes y generando con IA real…</div>';el('result').innerHTML='';el('sources').innerHTML='';try{const r=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+(localStorage.getItem('educpro_token')||'')},body:JSON.stringify({prompt,context})});const raw=await r.text();let data;try{data=JSON.parse(raw)}catch(_){throw new Error('El servidor respondió con una página HTML en vez de JSON. Reiniciá Educ.Pro IA desde la carpeta correcta.')}if(!r.ok)throw new Error(data.error||'Error del servidor');el('result').innerHTML=renderAI(data.text||'');el('statusBox').innerHTML='<div class="status">✅ Generado con IA real. Modelo: '+escapeHtml(data.model||'configurado en el servidor')+'</div>';if(lib.hits.length)el('sources').innerHTML='<b>🔎 Fragmentos utilizados:</b>'+lib.hits.slice(0,10).map((h,i)=>'<div class="source">'+(i+1)+'. '+escapeHtml(h.name)+' · '+escapeHtml(h.docType||'Material')+'</div>').join('');}catch(e){const msg=String(e.message||'Error al generar.');const busy=/ocupada|high demand|satur|reintentó|quota|rate limit/i.test(msg);el('statusBox').innerHTML='<div class="status">⚠️ '+escapeHtml(msg)+'</div>'+(busy?'<div style="margin-top:10px"><button type="button" onclick="generate()">🔄 Intentar nuevamente</button></div>':'')}
-function resultText(){return el('result').innerText||''}
-async function copyRich(){const html=el('result').innerHTML,text=resultText();try{if(navigator.clipboard&&window.ClipboardItem){await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([text],{type:'text/plain'})})]);alert('Copiado. Pegalo en Word y debería conservar las tablas.')}else{await navigator.clipboard.writeText(text);alert('Texto copiado.')}}catch(e){alert('No se pudo copiar automáticamente. Usá Ctrl+A dentro del resultado y Ctrl+C.')}}
-function downloadDoc(){const html='<!doctype html><html><head><meta charset="utf-8"><style>body{font-family:Arial,sans-serif}table{border-collapse:collapse;width:100%}th,td{border:1px solid #777;padding:7px;vertical-align:top}th{font-weight:bold}</style></head><body>'+el('result').innerHTML+'</'+ 'body></html>';const blob=new Blob([html],{type:'application/msword'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Educ.Pro_IA_documento.doc';a.click();URL.revokeObjectURL(a.href)}
-renderLibrary();
-</script>
-
-<div id="authModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10000;align-items:center;justify-content:center"><div style="background:#fff;border-radius:18px;padding:24px;max-width:480px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(0,0,0,.25)"><h2 id="authTitle" style="margin-top:0">🔐 Iniciar sesión</h2><input id="authEmail" type="email" placeholder="Tu email" style="width:100%;padding:12px;margin:6px 0;border:1px solid #ccd3df;border-radius:10px"><input id="authPassword" type="password" placeholder="Contraseña (mínimo 6 caracteres)" style="width:100%;padding:12px;margin:6px 0;border:1px solid #ccd3df;border-radius:10px"><div id="authMsg" class="small" style="margin-top:8px"></div><div class="row" style="justify-content:flex-end"><button type="button" class="secondary" onclick="closeAuth()">Cerrar</button><button type="button" onclick="submitAuth()">Continuar</button></div></div></div>
-<div id="plansModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:10000;align-items:center;justify-content:center"><div style="background:#fff;border-radius:18px;padding:24px;max-width:850px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(0,0,0,.25)"><h2 style="margin-top:0">💳 Planes Educ.Pro IA</h2><div id="plansGrid" class="grid"></div><p class="small">Los pagos se procesan en Mercado Pago. La activación del plan se confirma automáticamente mediante el servidor.</p><button type="button" class="secondary" onclick="document.getElementById('plansModal').style.display='none'">Cerrar</button></div></div>
 
 <script>
-(function(){
-  const appUrl = window.location.href.split('#')[0];
-  window.copyEducProLink = async function(){
-    try{
-      await navigator.clipboard.writeText(appUrl);
-      const s=document.getElementById('epShareStatus'); if(s) s.textContent='✅ Enlace copiado. Pegalo en Instagram, Facebook o WhatsApp.';
-    }catch(e){
-      const s=document.getElementById('epShareStatus'); if(s) s.textContent='Copiá el enlace desde la barra del navegador.';
-    }
-  };
-  window.shareEducPro = async function(){
-    const data={title:'Educ.Pro IA',text:'Asistente inteligente para docentes: planificaciones, proyectos, secuencias, evaluaciones y materiales.',url:appUrl};
-    try{
-      if(navigator.share){ await navigator.share(data); }
-      else { await window.copyEducProLink(); }
-    }catch(e){}
-  };
-  let deferredPrompt=null;
-  window.addEventListener('beforeinstallprompt', e=>{
-    e.preventDefault(); deferredPrompt=e;
-    const b=document.getElementById('epInstallBtn'); if(b) b.classList.remove('hidden');
-  });
-  window.installEducPro=async function(){
-    if(!deferredPrompt) return;
-    deferredPrompt.prompt();
-    try{ await deferredPrompt.userChoice; }catch(e){}
-    deferredPrompt=null;
-    const b=document.getElementById('epInstallBtn'); if(b) b.classList.add('hidden');
-  };
-  if('serviceWorker' in navigator){
-    window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+
+let materiales = [];
+let bibliotecaCategoriasSeleccionadas = [];
+let ultimo = '';
+
+const $ = id => document.getElementById(id);
+
+
+/* ESCAPE */
+
+function esc(s){
+
+  return String(s).replace(
+    /[&<>"']/g,
+    c => ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    }[c])
+  );
+
+}
+
+
+/* SCROLL */
+
+function ir(id){
+
+  const elemento = $(id);
+
+  if(elemento){
+
+    elemento.scrollIntoView({
+      behavior:'smooth'
+    });
+
   }
-})();
+
+}
+
+
+/* ESTADO */
+
+function setEstado(t,cl=''){
+
+  const estado = $('estado');
+
+  if(!estado)return;
+
+  estado.textContent = t;
+
+  estado.className =
+    'state ' + cl;
+
+}
+
+
+/* =====================================================
+   CUENTA / BASE SAAS
+===================================================== */
+function cargarCuenta(){
+  try{
+    const raw = localStorage.getItem('eduSistemCuenta');
+    if(!raw) return;
+    const c = JSON.parse(raw);
+    if($('cuentaEmail')) $('cuentaEmail').value = c.email || '';
+    if($('cuentaPlan')) $('cuentaPlan').value = c.plan || 'gratis';
+    actualizarCuentaEstado();
+  }catch(_){}
+}
+function guardarCuenta(){
+  const email = ($('cuentaEmail')?.value || '').trim();
+  const plan = $('cuentaPlan')?.value || 'gratis';
+  if(!email){
+    alert('Ingresá un correo para identificar esta sesión.');
+    return;
+  }
+  localStorage.setItem('eduSistemCuenta', JSON.stringify({email, plan, savedAt:new Date().toISOString()}));
+  actualizarCuentaEstado();
+}
+function borrarCuenta(){
+  localStorage.removeItem('eduSistemCuenta');
+  if($('cuentaEmail')) $('cuentaEmail').value='';
+  if($('cuentaPlan')) $('cuentaPlan').value='gratis';
+  if($('cuentaEstado')) $('cuentaEstado').textContent='Modo visitante. Tus datos no se envían hasta generar.';
+}
+function actualizarCuentaEstado(){
+  const box=$('cuentaEstado');
+  if(!box)return;
+  try{
+    const c=JSON.parse(localStorage.getItem('eduSistemCuenta')||'null');
+    if(c) box.textContent=`Sesión local: ${c.email} · Plan: ${c.plan}.`;
+  }catch(_){}
+}
+
+/* =====================================================
+   COMPROBAR CONEXIÓN
+===================================================== */
+
+async function health(){
+
+  const status =
+    $('status');
+
+  if(!status)return;
+
+  status.textContent =
+    'Comprobando conexión…';
+
+  try{
+
+    const r =
+      await fetch(
+        '/api/health',
+        {
+          method:'GET',
+          cache:'no-store'
+        }
+      );
+
+    if(!r.ok){
+
+      throw new Error(
+        'Servidor no disponible'
+      );
+
+    }
+
+    const data =
+      await r.json();
+
+    if(data && data.ok){
+
+      status.textContent =
+        '🟢 Servidor conectado';
+
+      status.style.background =
+        '#ecfdf3';
+
+      status.style.color =
+        '#067647';
+
+    }else{
+
+      status.textContent =
+        '🔴 Servidor con problemas';
+
+    }
+
+  }catch(e){
+
+    status.textContent =
+      '🔴 Error de conexión';
+
+    status.style.background =
+      '#fef3f2';
+
+    status.style.color =
+      '#b42318';
+
+  }
+
+}
+
+
+/* =====================================================
+   BIBLIOTECA CURRICULAR CÓRDOBA
+===================================================== */
+
+document.querySelectorAll('.biblioteca-check').forEach(check => {
+  check.addEventListener('change', function(){
+    const categoria = this.value;
+    if(this.checked){
+      if(!bibliotecaCategoriasSeleccionadas.includes(categoria)){
+        bibliotecaCategoriasSeleccionadas.push(categoria);
+      }
+    }else{
+      bibliotecaCategoriasSeleccionadas = bibliotecaCategoriasSeleccionadas.filter(x => x !== categoria);
+    }
+    renderBiblioteca();
+  });
+});
+
+function renderBiblioteca(){
+  const box = $('bibliotecaSeleccionadas');
+  if(!box)return;
+
+  if(!bibliotecaCategoriasSeleccionadas.length){
+    box.innerHTML = '📚 No seleccionaste referencias todavía.';
+    return;
+  }
+
+  box.innerHTML = '<strong>📚 Referencias seleccionadas:</strong> ' +
+    bibliotecaCategoriasSeleccionadas.map(esc).join(' · ');
+}
+
+
+/* =====================================================
+   MATERIALES DEL DOCENTE
+===================================================== */
+
+function agregarMaterial(){
+
+  const input =
+    $('archivo');
+
+  const files =
+    [...input.files];
+
+  if(!files.length){
+
+    alert(
+      'Seleccioná uno o más archivos.'
+    );
+
+    return;
+
+  }
+
+
+  for(const f of files){
+
+    const existe =
+      materiales.some(
+        x =>
+          x.name === f.name &&
+          x.size === f.size
+      );
+
+    if(!existe){
+
+      materiales.push(f);
+
+    }
+
+  }
+
+
+  input.value = '';
+
+  renderMateriales();
+
+}
+
+
+function renderMateriales(){
+
+  const box =
+    $('materialesLista');
+
+  if(!box)return;
+
+
+  if(!materiales.length){
+
+    box.innerHTML =
+      '<p class="small">Todavía no agregaste materiales.</p>';
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    materiales
+      .map(
+        (m,i) => `
+
+          <div class="material">
+
+            <span>
+
+              📄 ${esc(m.name)}
+
+              <small>
+                (${Math.round(m.size / 1024)} KB)
+              </small>
+
+            </span>
+
+            <button
+              type="button"
+              class="danger"
+              onclick="eliminarMaterial(${i})">
+
+              Eliminar
+
+            </button>
+
+          </div>
+
+        `
+      )
+      .join('');
+
+}
+
+
+function eliminarMaterial(i){
+
+  materiales.splice(i,1);
+
+  renderMateriales();
+
+}
+
+
+/* =====================================================
+   GENERAR
+===================================================== */
+
+async function generar(){
+
+  const tema =
+    $('tema')
+      .value
+      .trim();
+
+
+  if(!tema){
+
+    setEstado(
+      'Escribí el tema que necesitás trabajar.',
+      'err'
+    );
+
+    ir('crear');
+
+    return;
+
+  }
+
+
+  const btn =
+    $('btnGenerar');
+
+
+  btn.disabled = true;
+
+  btn.textContent =
+    '⏳ Generando…';
+
+
+  $('resultadoTexto')
+    .textContent = '';
+
+
+  setEstado(
+    'Preparando la solicitud…'
+  );
+
+
+  /*
+    Vercel tiene un límite de payload.
+    Dejamos margen de seguridad.
+  */
+
+  const MAX_TOTAL =
+    3 * 1024 * 1024;
+
+  const MAX_ARCHIVOS = 2;
+
+
+  const todosLosMateriales = materiales.map(
+    f => ({
+      file:f,
+      categoria:'Materiales del docente',
+      name:f.name,
+      size:f.size
+    })
+  );
+
+
+  if(
+    todosLosMateriales.length >
+    MAX_ARCHIVOS
+  ){
+
+    setEstado(
+      'Podés enviar hasta 2 documentos por generación. Eliminá algún archivo y volvé a intentar.',
+      'err'
+    );
+
+    btn.disabled = false;
+
+    btn.textContent =
+      '✨ Crear con Gemini';
+
+    return;
+
+  }
+
+
+  let totalBytes = 0;
+
+
+  for(
+    const item of todosLosMateriales
+  ){
+
+    totalBytes +=
+      item.file.size;
+
+  }
+
+
+  if(totalBytes > MAX_TOTAL){
+
+    const totalMB =
+      (
+        totalBytes /
+        (1024 * 1024)
+      ).toFixed(2);
+
+
+    setEstado(
+      'Los documentos seleccionados ocupan ' +
+      totalMB +
+      ' MB. El máximo permitido es 3 MB.',
+      'err'
+    );
+
+
+    btn.disabled = false;
+
+    btn.textContent =
+      '✨ Crear con Gemini';
+
+    return;
+
+  }
+
+
+  const fd =
+    new FormData();
+
+
+  fd.append(
+    'provincia',
+    $('provincia').value
+  );
+
+
+  fd.append(
+    'tipo',
+    $('tipo').value
+  );
+
+  fd.append(
+    'nivel',
+    $('nivel').value
+  );
+
+  fd.append(
+    'grado',
+    $('grado').value
+  );
+
+  fd.append(
+    'area',
+    $('area').value
+  );
+
+  fd.append(
+    'tema',
+    tema
+  );
+
+  fd.append(
+    'duracion',
+    $('duracion').value
+  );
+
+  fd.append(
+    'indicaciones',
+    $('indicaciones').value
+  );
+
+
+  todosLosMateriales.forEach(item => {
+    fd.append(
+      'materiales',
+      item.file,
+      item.file.name
+    );
+  });
+
+  bibliotecaCategoriasSeleccionadas.forEach(categoria => {
+    fd.append(
+      'bibliotecaCategorias',
+      categoria
+    );
+  });
+
+
+  try{
+
+    setEstado(
+      'Consultando Gemini y preparando el documento…'
+    );
+
+
+    const r =
+      await fetch(
+        '/api/generar',
+        {
+          method:'POST',
+          body:fd
+        }
+      );
+
+
+    const raw =
+      await r.text();
+
+
+    let j = {};
+
+
+    try{
+
+      j =
+        JSON.parse(raw);
+
+    }catch(e){
+
+      j = {
+        error:
+          raw ||
+          ('HTTP ' + r.status)
+      };
+
+    }
+
+
+    if(!r.ok){
+
+      throw new Error(
+        j.error ||
+        ('HTTP ' + r.status)
+      );
+
+    }
+
+
+    ultimo =
+      j.texto || '';
+
+
+    $('resultadoTexto')
+      .textContent =
+      ultimo;
+
+
+    let mensaje =
+      '✓ Generado correctamente con ' +
+      (j.modelo || 'Gemini');
+
+
+    if(
+      todosLosMateriales.length
+    ){
+
+      mensaje +=
+        ' · Documentos enviados: ' +
+        todosLosMateriales.length;
+
+    }
+
+
+    if(bibliotecaCategoriasSeleccionadas.length){
+      mensaje +=
+        ' · Biblioteca: ' +
+        bibliotecaCategoriasSeleccionadas.join(', ');
+    }
+
+
+    if(
+      j.materialesUsados &&
+      j.materialesUsados.length
+    ){
+
+      mensaje +=
+        ' · Materiales usados: ' +
+        j.materialesUsados.join(', ');
+
+    }
+
+
+    setEstado(
+      mensaje,
+      'ok'
+    );
+
+
+    ir('resultado');
+
+
+  }catch(e){
+
+    setEstado(
+      'Error: ' +
+      e.message,
+      'err'
+    );
+
+  }finally{
+
+    btn.disabled = false;
+
+    btn.textContent =
+      '✨ Crear con Gemini';
+
+  }
+
+}
+
+
+/* =====================================================
+   COPIAR
+===================================================== */
+
+async function copiar(){
+
+  if(!ultimo)return;
+
+  try{
+
+    await navigator
+      .clipboard
+      .writeText(ultimo);
+
+    setEstado(
+      '✓ Copiado al portapapeles.',
+      'ok'
+    );
+
+  }catch(e){
+
+    setEstado(
+      'No se pudo copiar automáticamente.',
+      'err'
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   TXT
+===================================================== */
+
+function descargar(){
+
+  if(!ultimo)return;
+
+
+  const blob =
+    new Blob(
+      [ultimo],
+      {
+        type:
+          'text/plain;charset=utf-8'
+      }
+    );
+
+
+  const u =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement('a');
+
+
+  a.href = u;
+
+
+  a.download =
+    'Edu.sistem_Pro_IA_resultado.txt';
+
+
+  a.click();
+
+
+  setTimeout(
+    () =>
+      URL.revokeObjectURL(u),
+    1000
+  );
+
+}
+
+
+/* =====================================================
+   WORD
+===================================================== */
+
+function descargarWord(){
+
+  if(!ultimo)return;
+
+
+  const html =
+    '<!doctype html>' +
+    '<html>' +
+    '<head>' +
+    '<meta charset="utf-8">' +
+    '<title>Edu.sistem Pro IA</title>' +
+    '</head>' +
+    '<body style="font-family:Arial;line-height:1.55">' +
+    '<h1>Edu.sistem Pro IA</h1>' +
+    '<div>' +
+    esc(ultimo)
+      .replace(/\n/g,'<br>') +
+    '</div>' +
+    '</body>' +
+    '</html>';
+
+
+  const blob =
+    new Blob(
+      ['\ufeff',html],
+      {
+        type:
+          'application/msword'
+      }
+    );
+
+
+  const u =
+    URL.createObjectURL(blob);
+
+
+  const a =
+    document.createElement('a');
+
+
+  a.href = u;
+
+
+  a.download =
+    'Edu.sistem_Pro_IA_resultado.doc';
+
+
+  a.click();
+
+
+  setTimeout(
+    () =>
+      URL.revokeObjectURL(u),
+    1000
+  );
+
+}
+
+
+/* =====================================================
+   PDF
+===================================================== */
+
+function imprimir(){
+
+  if(!ultimo)return;
+
+
+  const w =
+    window.open(
+      '',
+      '_blank'
+    );
+
+
+  if(!w){
+
+    setEstado(
+      'El navegador bloqueó la ventana de impresión. Permitila para descargar PDF.',
+      'err'
+    );
+
+    return;
+
+  }
+
+
+  w.document.write(
+
+    '<html>' +
+    '<head>' +
+    '<title>Edu.sistem Pro IA</title>' +
+    '<style>' +
+    'body{font-family:Arial;line-height:1.55;padding:35px;white-space:pre-wrap}' +
+    '</style>' +
+    '</head>' +
+    '<body>' +
+    esc(ultimo) +
+    '</body>' +
+    '</html>'
+
+  );
+
+
+  w.document.close();
+
+  w.focus();
+
+  w.print();
+
+}
+
+
+/* =====================================================
+   COMPARTIR
+===================================================== */
+
+async function compartir(){
+
+  if(!ultimo)return;
+
+
+  if(navigator.share){
+
+    try{
+
+      await navigator.share({
+
+        title:
+          'Edu.sistem Pro IA',
+
+        text:
+          ultimo
+
+      });
+
+    }catch(e){}
+
+  }else{
+
+    copiar();
+
+  }
+
+}
+
+
+/* =====================================================
+   LIMPIAR
+===================================================== */
+
+function limpiar(){
+
+  $('tema').value = '';
+
+  $('grado').value = '';
+
+  $('area').value = '';
+
+  $('duracion').value = '';
+
+  $('indicaciones').value = '';
+
+  $('resultadoTexto')
+    .textContent = '';
+
+  ultimo = '';
+
+  materiales = [];
+
+  bibliotecaCategoriasSeleccionadas = [];
+
+  document.querySelectorAll('.biblioteca-check').forEach(c => c.checked = false);
+
+  renderMateriales();
+
+  renderBiblioteca();
+
+  setEstado(
+    'Formulario limpiado.'
+  );
+
+  ir('crear');
+
+}
+
+
+/* =====================================================
+   INICIO
+===================================================== */
+
+renderMateriales();
+
+renderBiblioteca();
+
+health();
+
 </script>
-<script>
-let authMode='login';
-function openAuth(mode){authMode=mode;document.getElementById('authModal').style.display='flex';document.getElementById('authTitle').textContent=mode==='login'?'🔐 Iniciar sesión':'✨ Crear cuenta gratis';document.getElementById('authMsg').textContent='';}
-function closeAuth(){document.getElementById('authModal').style.display='none';}
-async function submitAuth(){const email=document.getElementById('authEmail').value.trim(),password=document.getElementById('authPassword').value,msg=document.getElementById('authMsg');msg.textContent='Procesando…';try{const r=await fetch('/api/'+(authMode==='login'?'login':'register'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password})});const d=await r.json();if(!r.ok)throw new Error(d.error||'No se pudo completar.');localStorage.setItem('educpro_token',d.token);closeAuth();renderAccount(d.user)}catch(e){msg.textContent='⚠️ '+e.message}}
-function renderAccount(u){const st=document.getElementById('accountStatus'),ac=document.getElementById('accountActions');if(!u){st.innerHTML='No hay una sesión iniciada.';ac.innerHTML='<button type="button" onclick="openAuth(\'login\')">🔐 Iniciar sesión</button><button type="button" class="secondary" onclick="openAuth(\'register\')">✨ Crear cuenta gratis</button><button type="button" class="secondary" onclick="showPlans()">💳 Ver planes</button>';return}st.innerHTML='✅ <b>'+escapeHtml(u.email)+'</b> · Plan <b>'+escapeHtml(u.plan)+'</b> · Generaciones <b>'+u.usage+'/'+u.limit+'</b>';ac.innerHTML='<button type="button" onclick="showPlans()">💳 Ver planes</button><button type="button" class="secondary" onclick="logout()">Cerrar sesión</button>'}
-async function showPlans(){const m=document.getElementById('plansModal'),g=document.getElementById('plansGrid');m.style.display='flex';g.innerHTML='Cargando planes…';try{const d=await fetch('/api/plans').then(r=>r.json());g.innerHTML=d.plans.map(p=>'<div class="option"><h3>'+p.name+'</h3><p class="small">'+escapeHtml(p.description||'')+'</p><div style="font-size:22px;font-weight:bold">'+(p.price===0?'Gratis':p.price===null?'A consultar':'$'+p.price.toLocaleString('es-AR')+'/mes')+'</div><p>'+p.limit+' generaciones/mes</p>'+(p.id==='gratis'?'<span class="badge">Plan gratuito</span>':p.id==='institucion'?'<button type="button" class="secondary" onclick="contactInstitution()">Consultar</button>':'<button type="button" onclick="subscribePlan(\''+p.id+'\')">💳 Suscribirme</button>')+'</div>').join('')}catch{g.innerHTML='No se pudieron cargar los planes.'}}
-async function subscribePlan(plan){const token=localStorage.getItem('educpro_token');if(!token){openAuth('login');return}const g=document.getElementById('plansGrid');g.innerHTML='<div class="status">⏳ Preparando el checkout seguro…</div>';try{const r=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({plan})});const d=await r.json();if(!r.ok)throw new Error(d.error||'No se pudo iniciar la suscripción.');if(d.init_point){window.location.href=d.init_point;return}throw new Error('Mercado Pago no devolvió el enlace de checkout.')}catch(e){g.innerHTML='<div class="status">⚠️ '+escapeHtml(e.message)+'</div><button type="button" class="secondary" onclick="showPlans()">Volver a planes</button>'}}
-function contactInstitution(){alert('Plan Institución: escribinos para cotización y configuración.')}
-async function loadAccount(){const t=localStorage.getItem('educpro_token');if(!t)return;try{const r=await fetch('/api/me',{headers:{Authorization:'Bearer '+t}});if(!r.ok)throw new Error();renderAccount((await r.json()).user)}catch{localStorage.removeItem('educpro_token')}}
-async function logout(){const t=localStorage.getItem('educpro_token');try{await fetch('/api/logout',{method:'POST',headers:{Authorization:'Bearer '+t}})}catch{}localStorage.removeItem('educpro_token');renderAccount(null)}
-loadAccount();
-</script>
+
+
+
 </body></html>

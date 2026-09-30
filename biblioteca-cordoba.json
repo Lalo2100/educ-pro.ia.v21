@@ -1,0 +1,20 @@
+{
+  "app": "Edu.sistem Pro IA",
+  "version": "2.5",
+  "provincia": "Córdoba",
+  "nota": "Catálogo interno de referencias y orientaciones. Los documentos oficiales específicos deben incorporarse al servidor o consultarse desde fuentes oficiales cuando corresponda.",
+  "categorias": [
+    {"nombre":"Inicial","descripcion":"Referencias curriculares para Educación Inicial.","orientacion":"Considerar aprendizajes, experiencias, juego, lenguajes y propuestas propias del nivel."},
+    {"nombre":"Primaria","descripcion":"Referencias curriculares para Educación Primaria.","orientacion":"Considerar aprendizajes, contenidos, capacidades y progresión propios del nivel y ciclo."},
+    {"nombre":"Secundaria","descripcion":"Referencias curriculares para Educación Secundaria.","orientacion":"Considerar espacios curriculares, aprendizajes, contenidos, capacidades y evaluación del nivel."},
+    {"nombre":"Superior","descripcion":"Referencias para Educación Superior.","orientacion":"Adaptar las propuestas a formación docente o técnica y a los marcos curriculares correspondientes."},
+    {"nombre":"Educación Especial","descripcion":"Referencias y orientaciones para Educación Especial.","orientacion":"Priorizar accesibilidad, apoyos, diversidad, participación y adecuaciones pertinentes."},
+    {"nombre":"Jóvenes y Adultos","descripcion":"Referencias para la modalidad de Jóvenes y Adultos.","orientacion":"Contextualizar aprendizajes y actividades en trayectorias, experiencias y necesidades de personas jóvenes y adultas."},
+    {"nombre":"Educación Rural","descripcion":"Referencias específicas para Educación Rural.","orientacion":"Contextualizar propuestas al ámbito rural, su comunidad, territorio y organización escolar."},
+    {"nombre":"Técnico Profesional","descripcion":"Materiales y referencias para Educación Técnico Profesional.","orientacion":"Relacionar aprendizajes con capacidades profesionales, prácticas y problemas propios del campo técnico."},
+    {"nombre":"Progresiones","descripcion":"Orientaciones para trabajar progresiones de aprendizaje.","orientacion":"Organizar expectativas y actividades de manera gradual, observando avances y evidencias de aprendizaje."},
+    {"nombre":"Aprendizajes y Contenidos Fundamentales","descripcion":"Referencia vinculada a aprendizajes y contenidos curriculares.","orientacion":"Priorizar aprendizajes y contenidos centrales al diseñar la propuesta."},
+    {"nombre":"Actualización curricular","descripcion":"Referencias de actualización curricular.","orientacion":"Utilizar criterios de actualización y contextualización curricular evitando presentar como oficial aquello que no esté documentado."},
+    {"nombre":"Referencias 2026","descripcion":"Categoría de trabajo para referencias del ciclo 2026.","orientacion":"Permite organizar materiales y referencias que el docente incorpore o que la aplicación integre para el ciclo 2026."}
+  ]
+}
